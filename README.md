@@ -35,20 +35,28 @@ https://zhoushengisnoob.github.io/papers/TOIS.pdf
 
 
 ## Agenda:
-1. Decide whether App comes up with Recommendations or Group Decisions
-2. Do we swipe...
-    1. SICSS Participants (Persons)
-        - Each participant needs individual card with academic & social preferences
-        - Swipe based on similarities with person (yes/no) or (percentage of preferences)
-        - Recommendations based on resulting preference graph
-    2. Research Topics & Method Interests (Interests)
-        - Topic Collection for Research & Method Interest 
-        - Swipe interest for each topic
-        - Recommendations based on topic overlap
-3. What Topics should be included in the card?
+1. Research Topics & Method Interests (Interests)
+    - Topic Collection for Research & Method Interest 
+    - Swipe interest for each topic
+    - Recommendations based on topic overlap
+  
+2. What Topics should be included in the card?
+   - General Hint: The more specific, the better!
+   - Superlike am Ende
+   - Research Interest (unlimited)
+   - Methods  (unlimited)
+   - Weighting with:
+     - Expected output of project 
+     - What is most important to you?
+  
+3. How should character card look like?
+   - Picture & Name
+   - Choices 
+
 4. How should the model recommend, and how many rounds do we need?
-
-
+    1. Most Similar System
+    2. Most Different System
+    3. Random
 
 ## LICENSE: MIT License
 
