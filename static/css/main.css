@@ -4,9 +4,13 @@ footer {
 }
 
 #swipe-results,
-#step-2-form ,
-.tinder,
-#methodIntro
+#step-2-form
 {
     display: none;
+}
+
+.intermediate-step-img {
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
 }

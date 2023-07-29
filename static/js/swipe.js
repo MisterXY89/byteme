@@ -1,7 +1,7 @@
 'use strict';
 
 var preferences = {};
-var progress_bar = document.querySelector("#progress-bar");
+// var progress_bar = document.querySelector("#progress-bar");
 
 var tinderContainer = document.querySelector('.tinder');
 var allCards = document.querySelectorAll('.tinder--card');
@@ -60,8 +60,8 @@ allCards.forEach(function (el, index) {
         var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;      
 
         progress_perc = Math.round(Object.keys(preferences).length / allCards.length * 100);
-        progress_bar.style.width = progress_perc + "%";
-        progress_bar.innerHTML = progress_perc + "%";
+        // progress_bar.style.width = progress_perc + "%";
+        // progress_bar.innerHTML = progress_perc + "%";
 
         console.log(preferences);
         console.log(progress_perc);
@@ -88,10 +88,13 @@ allCards.forEach(function (el, index) {
         
         // if last card is removed, redirect to results page
         if (progress_perc == 100) {
-            let divResults = document.getElementById("swipe-results");
+            let divResults = document.getElementById("swiped-items");
+
             let tinder = document.getElementsByClassName("tinder")[0];
             tinder.style.display = "none";
-            divResults.innerHTML += "<a href='/results' class='btn btn-primary'>See Results</a>";
+            
+            // create tables for results: liked and disliked
+            // divResults.innerHTML = resultsTableHTML;
 
             // send preferences to server using fetch POST
             fetch('/swipe', {
@@ -131,8 +134,8 @@ function createButtonListener(love) {
         }
 
         progress_perc = Math.round(Object.keys(preferences).length / allCards.length * 100);
-        progress_bar.style.width = progress_perc + "%";
-        progress_bar.innerHTML = progress_perc + "%";
+        // progress_bar.style.width = progress_perc + "%";
+        // progress_bar.innerHTML = progress_perc + "%";
 
         console.log(preferences);
         console.log(progress_perc);

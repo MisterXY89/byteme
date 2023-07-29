@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block header %}
-<div class="container justify-content-center py-3 mb-2 border-bottom">
+<div class="container justify-content-center py-4 mb-4 border-bottom border-2 border-dark">
     <div class="row">
         <div class="pe-5 col-6 text-end">
             <strong>ByteMe</strong>
@@ -23,37 +23,21 @@
 
 {% block content %}
 
-<div id="intermediate-screen">
+<!-- <div id="intermediate-screen">       
 
-    <div id="researchInterestIntro" class="p-2">
-        <h2 class="text-center pb-2">Research Interest</h2>
-        <p class="lead w-75 mx-auto">
-            In this section, you will be presented with a series of research interests. 
-            Swipe right if you are interested in the research interest, and swipe left if you are not interested.
-
-            At the end, you will see a list of your swiped research interests, can correct them, and choose a favorite one (super-like).
-        </p>
-        <div class="form-row mb-3 text-center">
-            <button class="btn btn-lg btn-primary" type="button" id="startSwipeTopic">Swipe</button>
-        </div>
-    </div>
-
-    <div id="methodIntro" class="p-2">
-        <h2 class="text-center pb-2">Methods</h2>
-        <p class="lead w-75 mx-auto">
-            In this section, you will be presented with a series of methods.
-            Swipe right if you are interested in the methods, and swipe left if you are not interested.
-
-            At the end, you will see a list of your swiped methods, can correct them, and choose a favorite one (super-like).
-        </p>
-        <div class="form-row mb-3 text-center">
-            <button class="btn btn-lg btn-primary" type="button" id="startSwipeMethod">Swipe</button>
-        </div>
-    </div>
-
-</div>
+</div> -->
 
 <div id="swipe-results" class="text-center p-5">
+
+    <div class="container">
+
+        <h3 class="pb-3 border-bottom border-dark">Swipe Results</h3>
+        
+        <div id="swiped-items">
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -66,26 +50,77 @@
     <div class="tinder--cards">
 
         {% for item in swipe_items %}
-        <div class="tinder--card" id="{{ item['userMail'] }}">
-            <img src="https://picsum.photos/600/300">
-            <h3>{{ item['research_interest'] }}</h3>
-            <p class="text-start p-4 pt-0 pb-2">
-                {{ item['about'] }} <br />
-                <strong>Career Stage :</strong> {{ item["career_stage"] }} <br />
-                <strong>Academic Discipline:</strong> {{ item["academic_discipline"] }} <br />
-                <!-- <strong>Interdisciplinary (Yes/No):</strong> {{ item["interdisciplinary_yes_no"] }}  <br/> -->
-                <strong>Project Output:</strong> {{ item["project_output"] }} <br />
-                <!-- <strong>Methodology/Design:</strong> {{ item["methodology_design"] }}  <br/> -->
-                <strong>Preferred Programming Language:</strong> {{ item["programming_preferred_language"] }} <br />
-                <strong>Content/Methodology Preference:</strong> {{ item["content_methodology"] }} <br />
-                <!-- <strong>Flexibility (Evening/Night):</strong> {{ item["flexibility_evening_night"] }}  <br/> -->
-                <strong>Location:</strong> {{ item["location"] }} <br />
-                <strong>Favorite Citation Style:</strong> {{ item["favorite_citation_style"] }} <br />
-                <strong>Light Mode or Dark Mode:</strong> {{ item["light_mode_or_dark_mode"] }} <br />
-                <strong>Your Song:</strong> {{ item["your_song"] }} <br />
-            </p>
 
-        </div>
+            {% if item["swipe_type"] == 'topic' %}
+
+                <div class="tinder--card {{ item['userMail'] }}">
+                    <img src="https://picsum.photos/600/300">
+                    <h3>Research Interest: {{ item['research_interest'] }}</h3>
+                    <p class="text-start p-4 pt-0 pb-2">
+                        {{ item['about'] }} <br />
+                        <strong>Career Stage :</strong> {{ item["career_stage"] }} <br />
+                        <strong>Academic Discipline:</strong> {{ item["academic_discipline"] }} <br />
+                        <!-- <strong>Interdisciplinary (Yes/No):</strong> {{ item["interdisciplinary_yes_no"] }}  <br/> -->
+                        <strong>Project Output:</strong> {{ item["project_output"] }} <br />
+                        <!-- <strong>Methodology/Design:</strong> {{ item["methodology_design"] }}  <br/> -->
+                        <strong>Preferred Programming Language:</strong> {{ item["programming_preferred_language"] }} <br />                               
+                    </p>
+
+                </div>
+
+            {% elif item["swipe_type"] == 'method' %}
+                
+                <div class="tinder--card {{ item['userMail'] }}">
+                    <img src="https://picsum.photos/600/300">
+                    <h3>Method: {{ item['research_interest'] }}</h3>
+                    <p class="text-start p-4 pt-0 pb-2">
+                        {{ item['about'] }} <br />
+                        <strong>Career Stage :</strong> {{ item["career_stage"] }} <br />
+                        <strong>Academic Discipline:</strong> {{ item["academic_discipline"] }} <br />
+                        <!-- <strong>Interdisciplinary (Yes/No):</strong> {{ item["interdisciplinary_yes_no"] }}  <br/> -->
+                        <strong>Project Output:</strong> {{ item["project_output"] }} <br />
+                        <!-- <strong>Methodology/Design:</strong> {{ item["methodology_design"] }}  <br/> -->
+                        <strong>Preferred Programming Language:</strong> {{ item["programming_preferred_language"] }} <br />                               
+                    </p>
+
+                </div>
+
+            {% elif item["swipe_type"] == 'researchInterestIntro' %}
+            
+
+              <div class="tinder--card">                
+                <div id="researchInterestIntro" class="p-2">
+                    <img src="{{ url_for('static', filename='images/intermediate_img.jpg') }}" class="intermediate-step-img">
+                    <h3 class="text-center pb-2">Research Interest</h3>
+                    <p class="">
+                        In this section, you will be presented with a series of research interests. 
+                        Swipe right if you are interested in the research interest, and swipe left if you are not interested.
+            
+                        At the end, you will see a list of your swiped research interests, can correct them, and choose a favorite one (super-like).
+                    </p>                    
+                </div>
+              </div>
+
+            {% elif item["swipe_type"] == 'methodIntro' %}
+                
+                <div class="tinder--card">
+
+                    <div id="methodIntro" class="p-2">
+                        <img src="{{ url_for('static', filename='images/intermediate_img.jpg') }}" class="intermediate-step-img">
+                        <h3 class="text-center pb-2">Methods</h3>
+                        <p class="">
+                            In this section, you will be presented with a series of methods.
+                            Swipe right if you are interested in the methods, and swipe left if you are not interested.
+                
+                            At the end, you will see a list of your swiped methods, can correct them, and choose a favorite one (super-like).
+                        </p>                        
+                    </div>
+
+                </div>                
+                
+            {% endif %}
+
+        
         {% endfor %}
     </div>
     <div class="tinder--buttons">

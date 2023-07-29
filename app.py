@@ -13,6 +13,14 @@ def results():
 	# return render_template("results.html")
 
 
+@app.route('/checkResults')
+def checkResults():
+    # check if all users have swiped & return true/false
+    # if true, calculate matches and send along with userMail to all users
+    return "checkResults"
+    
+
+
 # swipe post --> read preferences from request and save file
 @app.route('/swipe', methods=['POST'])
 def swipe_post():
@@ -25,6 +33,7 @@ def swipe_post():
 
 
 
+
 @app.route('/swipe')
 def swipe():
     # GET userMail from request
@@ -32,7 +41,10 @@ def swipe():
     userMail = request.args.get('userMail')
     print(userMail)
 
+    # TODO: between swipe Items add: methodIntro and researchInterestIntro as swipe_types
+
     swipe_items = load_swipe_items()
+    print(swipe_items)
     # swipe_items = []
     return render_template("swipe.html", userMail=userMail, swipe_items=swipe_items)
 

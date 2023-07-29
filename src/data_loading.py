@@ -4,10 +4,11 @@ import pandas as pd
 def load_swipe_items(userMail="bwoollam1d@nytimes.com"):
     # exclude userMail from swipe_items
     df = pd.read_csv("data/MOCK_DATA.csv")
-    print(df)
-    print(df.columns)
 
     df = df[df["userMail"] != userMail].head(5)
+    df["swipe_type"] = ["researchInterestIntro", "topic", "topic", "methodIntro", "method"]
+
+    print(df)
 
     return df.to_dict(orient="records")
 
