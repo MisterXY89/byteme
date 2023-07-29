@@ -30,33 +30,29 @@ $ python3 app.py
 Visit http://localhost:8080/ to view the app.
 
 
-## For nerwork-based recommendations
-https://zhoushengisnoob.github.io/papers/TOIS.pdf
+## Planned Usage:
 
-
-## Agenda:
-1. Research Topics & Method Interests (Interests)
-    - Topic Collection for Research & Method Interest 
-    - Swipe interest for each topic
-    - Recommendations based on topic overlap
-  
-2. What Topics should be included in the card?
+1. Get pool of topics via google-docs form
    - General Hint: The more specific, the better!
-   - Superlike am Ende
    - Research Interest (unlimited)
    - Methods  (unlimited)
-   - Weighting with:
-     - Expected output of project 
-     - What is most important to you?
   
-3. How should character card look like?
-   - Picture & Name
+2. Generate Participant Accounts
+   - Picture (Icon)
+   - Name?
    - Choices 
 
+3. Generate Data via swipe-mechanism
+    - Reaearch Interests
+    - Methods
+    - Desired output of project
+    - Importance: Methods vs. Research Interest
+    - Superlike at the end
+
 4. How should the model recommend, and how many rounds do we need?
-    1. Most Similar System
-    2. Most Different System
-    3. Random
+    - Most Similar System
+    - Most Different System
+    - Random
 
 ## LICENSE: MIT License
 
