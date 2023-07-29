@@ -39,3 +39,17 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Agenda:
+1. Decide whether App comes up with Recommendations or Group Decisions
+2. Do we swipe...
+    1. SICSS Participants (Persons)
+        - Each participant needs individual card with academic & social preferences
+        - Swipe based on similarities with person (yes/no) or (percentage of preferences)
+        - Recommendations based on resulting preference graph
+    2. Research Topics & Method Interests (Interests)
+        - Topic Collection for Research & Method Interest 
+        - Swipe interest for each topic
+        - Recommendations based on topic overlap
+3. What Topics should be included in the card?
+4. How should the model recommend, and how many rounds do we need?
