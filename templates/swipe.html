@@ -8,19 +8,50 @@
         <div class="col-6 text-start">
             {{ userMail }}
         </div>
-    </div>    
-    <div class="row pt-2">
+    </div>
+    <!-- <div class="row pt-2">
         <div class="col pt-3">
             <div class="progress" style="margin:auto; margin-top:5px; width: 310px;">
-                <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100">1%</div>
+                <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="1"
+                    aria-valuemin="0" aria-valuemax="100">1%</div>
             </div>
         </div>
-    </div>    
-    
+    </div> -->
+
 </div>
 {% endblock %}
 
 {% block content %}
+
+<div id="intermediate-screen">
+
+    <div id="researchInterestIntro" class="p-2">
+        <h2 class="text-center pb-2">Research Interest</h2>
+        <p class="lead w-75 mx-auto">
+            In this section, you will be presented with a series of research interests. 
+            Swipe right if you are interested in the research interest, and swipe left if you are not interested.
+
+            At the end, you will see a list of your swiped research interests, can correct them, and choose a favorite one (super-like).
+        </p>
+        <div class="form-row mb-3 text-center">
+            <button class="btn btn-lg btn-primary" type="button" id="startSwipeTopic">Swipe</button>
+        </div>
+    </div>
+
+    <div id="methodIntro" class="p-2">
+        <h2 class="text-center pb-2">Methods</h2>
+        <p class="lead w-75 mx-auto">
+            In this section, you will be presented with a series of methods.
+            Swipe right if you are interested in the methods, and swipe left if you are not interested.
+
+            At the end, you will see a list of your swiped methods, can correct them, and choose a favorite one (super-like).
+        </p>
+        <div class="form-row mb-3 text-center">
+            <button class="btn btn-lg btn-primary" type="button" id="startSwipeMethod">Swipe</button>
+        </div>
+    </div>
+
+</div>
 
 <div id="swipe-results" class="text-center p-5">
 
@@ -28,10 +59,10 @@
 
 <div class="tinder">
     <div class="tinder--status">
-      <i class="fa fa-remove"></i>
-      <i class="fa fa-heart"></i>
+        <i class="fa fa-remove"></i>
+        <i class="fa fa-heart"></i>
     </div>
-  
+
     <div class="tinder--cards">
 
         {% for item in swipe_items %}
@@ -39,31 +70,70 @@
             <img src="https://picsum.photos/600/300">
             <h3>{{ item['research_interest'] }}</h3>
             <p class="text-start p-4 pt-0 pb-2">
-                {{ item['about'] }} <br/>                
-                <strong>Career Stage :</strong> {{ item["career_stage"] }} <br/>
-                <strong>Academic Discipline:</strong> {{ item["academic_discipline"] }}  <br/>
+                {{ item['about'] }} <br />
+                <strong>Career Stage :</strong> {{ item["career_stage"] }} <br />
+                <strong>Academic Discipline:</strong> {{ item["academic_discipline"] }} <br />
                 <!-- <strong>Interdisciplinary (Yes/No):</strong> {{ item["interdisciplinary_yes_no"] }}  <br/> -->
-                <strong>Project Output:</strong> {{ item["project_output"] }}  <br/>
+                <strong>Project Output:</strong> {{ item["project_output"] }} <br />
                 <!-- <strong>Methodology/Design:</strong> {{ item["methodology_design"] }}  <br/> -->
-                <strong>Preferred Programming Language:</strong> {{ item["programming_preferred_language"] }}  <br/>
-                <strong>Content/Methodology Preference:</strong> {{ item["content_methodology"] }}  <br/>
+                <strong>Preferred Programming Language:</strong> {{ item["programming_preferred_language"] }} <br />
+                <strong>Content/Methodology Preference:</strong> {{ item["content_methodology"] }} <br />
                 <!-- <strong>Flexibility (Evening/Night):</strong> {{ item["flexibility_evening_night"] }}  <br/> -->
-                <strong>Location:</strong> {{ item["location"] }}  <br/>
-                <strong>Favorite Citation Style:</strong> {{ item["favorite_citation_style"] }}  <br/>
-                <strong>Light Mode or Dark Mode:</strong> {{ item["light_mode_or_dark_mode"] }}  <br/>
-                <strong>Your Song:</strong> {{ item["your_song"] }}  <br/>
+                <strong>Location:</strong> {{ item["location"] }} <br />
+                <strong>Favorite Citation Style:</strong> {{ item["favorite_citation_style"] }} <br />
+                <strong>Light Mode or Dark Mode:</strong> {{ item["light_mode_or_dark_mode"] }} <br />
+                <strong>Your Song:</strong> {{ item["your_song"] }} <br />
             </p>
 
         </div>
         {% endfor %}
     </div>
     <div class="tinder--buttons">
-      <button id="nope"><i class="fa fa-remove"></i></button>
-      <button id="love"><i class="fa fa-heart"></i></button>
+        <button id="nope"><i class="fa fa-remove"></i></button>
+        <button id="love"><i class="fa fa-heart"></i></button>
     </div>
-  </div>
+</div>
 
 <!-- Custom JS -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/swipe.js') }}"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(event) {
+
+    console.log("DOM fully loaded and parsed");
+
+    const intermediateScreen = document.getElementById("intermediate-screen");
+    const researchInterestIntro = document.getElementById("researchInterestIntro");
+    const methodIntro = document.getElementById("methodIntro");
+    const swipeResults = document.getElementById("swipe-results");
+    const startSwipeTopic = document.getElementById("startSwipeTopic");
+    const startSwipeMethod = document.getElementById("startSwipeMethod");
+    const tinderSwipeDiv = document.getElementsByClassName("tinder")[0];
+
+    researchInterestIntro.style.display = "block";
+
+
+    startSwipeTopic.addEventListener("click", function() {
+        researchInterestIntro.style.display = "none";
+        tinderSwipeDiv.style.display = "block";
+    });
+
+    // last swipe topic:
+    // --> hide tinderSwipeDiv
+    // --> show method intro
+
+    startSwipeMethod.addEventListener("click", function() {
+        methodIntro.style.display = "none";
+        intermediateScreen.style.display = "none";
+        tinderSwipeDiv.style.display = "block";
+    });
+
+
+
+
+});
+
+</script>
 
 {% endblock %}

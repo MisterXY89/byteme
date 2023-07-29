@@ -1,7 +1,7 @@
 'use strict';
 
-const preferences = {}
-const progress_bar = document.querySelector("#progress-bar");
+var preferences = {};
+var progress_bar = document.querySelector("#progress-bar");
 
 var tinderContainer = document.querySelector('.tinder');
 var allCards = document.querySelectorAll('.tinder--card');
