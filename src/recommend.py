@@ -73,6 +73,14 @@ class Recommender:
         bpplt.hinton(self.Z)
         plt.show()
 
+    def recommend_similar(round: str):
+        if round == "similar":
+            raise NotImplementedError()
+        if round == "different":
+            raise NotImplementedError()
+        if round == "random":
+            raise NotImplementedError()
+
 
 if __name__ == "__main__":
     model = Recommender(sim=True)
