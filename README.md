@@ -30,7 +30,7 @@ $ python3 app.py
 Visit http://localhost:8080/ to view the app.
 
 
-## For nerwork-bases recommendations
+## For nerwork-based recommendations
 https://zhoushengisnoob.github.io/papers/TOIS.pdf
 
 
