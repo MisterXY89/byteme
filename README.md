@@ -169,11 +169,11 @@ model.recommend(kind="motivation", group_size=5)
 
 
 
-Finally, there is also the possibility to create groups entirely randomly, where the `group_number`-parameter decides how many groups will be created.
+Finally, there is also the possibility to create groups entirely randomly, where the `group_size`-parameter decides how many groups will be created.
 
 
 ```python
-model.recommend(kind="random", group_number=6)
+model.recommend(kind="random", group_size=6)
 ```
 
 
