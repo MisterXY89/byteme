@@ -81,7 +81,8 @@ function show_results() {
 
 function collect_results() {
     /**
-     * Collect the results from the swipe cards
+     * Collect the results from the swipe cards and return them as a JSON object
+     * + collect superlike
      */
 
     var userMail = document.getElementById("user_mail").value;
@@ -104,8 +105,6 @@ function collect_results() {
 
         preferences[cardId].super_like = isSuperLike;
     }
-    console.log("AFTER:", preferences);
-
 
     var results = {
         user_mail: userMail,
@@ -138,6 +137,12 @@ function sendResults() {
 });
 
 function initCards(card, index) {
+    /**
+     * Initialize the cards
+     * 
+     * @param {object} card
+     * @param {number} index
+     */
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
 
     newCards.forEach(function (card, index) {
@@ -149,7 +154,13 @@ function initCards(card, index) {
     tinderContainer.classList.add('loaded');
 }
 
-function check_progress() {
+function checkProgress() {
+    /**
+     * Check the progress of the swipe cards
+     * if 100% -> show results
+     * Optional: show progress bar
+     */
+
     // -2 because of the intro cards (excluded)
     progress_perc = Math.round(Object.keys(preferences).length / (allCards.length-2) * 100);
     // console.log("PROGRESS: " + progress_perc);
@@ -163,6 +174,13 @@ function check_progress() {
 }
 
 function feedback(card, value) {
+    /**
+     * save the feedback of the card in the preferences object
+     * 1 or 0 for like or nope, skip intro cards
+     * 
+     * @param {object} card
+     * @param {number} value
+     */
     var card_id = card.id;
 
     if (card_id == "research_interest_intro" || card_id == "method_intro") {
@@ -179,20 +197,24 @@ function feedback(card, value) {
     // console.log("FEEDBACK:", preferences);
 }
 
+// name the functions for the swipe actions
 var action_love = (card) => feedback(card, 1);
 var action_nope = (card) => feedback(card, 0);
 
 initCards();
 
+// add the swipe functionality
 allCards.forEach(function (el, index) {
     var hammertime = new Hammer(el);
 
+    // keep track of the pan
     hammertime.on('pan', function (event) {
         el.classList.add('moving');
 
-        check_progress();
+        checkProgress();
     });
 
+    // reset the pan on release of the card
     hammertime.on('pan', function (event) {
         if (event.deltaX === 0) return;
         if (event.center.x === 0 && event.center.y === 0) return;
@@ -206,9 +228,10 @@ allCards.forEach(function (el, index) {
 
         event.target.style.transform = 'translate(' + event.deltaX + 'px, ' + event.deltaY + 'px) rotate(' + rotate + 'deg)';
 
-        check_progress();
+        checkProgress();
     });
 
+    // decide if the card is removed or not
     hammertime.on('panend', function (event) {
 
         if (tinderContainer.classList.contains('tinder_love')) {            
@@ -226,9 +249,11 @@ allCards.forEach(function (el, index) {
        
         event.target.classList.toggle('removed', !keep);
 
+        // if the card is removed, move it out of the screen
         if (keep) {
             event.target.style.transform = '';
         } else {
+            // animate the card out of the screen
             var endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
             var toX = event.deltaX > 0 ? endX : -endX;
             var endY = Math.abs(event.velocityY) * moveOutWidth;
@@ -241,11 +266,18 @@ allCards.forEach(function (el, index) {
             initCards();
         }
         
-        check_progress();
+        checkProgress();
     });
 });
 
 function createButtonListener(love) {
+    /**
+     * Create a button listener for the swipe buttons
+     * 
+     * @param {boolean} love
+     * @returns {function}
+     * 
+     */
     return function (event) {
         var cards = document.querySelectorAll('.tinder--card:not(.removed)');
         var moveOutWidth = document.body.clientWidth * 1.5;
@@ -263,12 +295,13 @@ function createButtonListener(love) {
             action_nope(card);
         }        
 
-        check_progress();
+        checkProgress();
         initCards();
         event.preventDefault();
     };
 }
 
+// event listeners
 var nopeListener = createButtonListener(false);
 var loveListener = createButtonListener(true);
 
