@@ -7,7 +7,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.patches as mpatches
 
-from simData import generate
+try:
+    from src.simData import generate
+except:
+    from .simData import generate
 
 
 class Recommender:

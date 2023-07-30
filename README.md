@@ -1,4 +1,8 @@
-# ByteMe
+ByteMe
+================
+
+<!-- include logo -->
+<img src="static/images/ByteMe Logo_phelia.png" align="right" height="200" />
 
 Match researchers/participants with each other based on their research interests.
 
