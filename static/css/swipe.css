@@ -144,4 +144,9 @@
   .fa-remove {
     color: #CDD6DD;
   }
+
+  
+.tinder--buttons {
+  z-index: 9999 !important;
+}
   

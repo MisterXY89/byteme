@@ -6,7 +6,7 @@
             <strong>ByteMe</strong>
         </div>
         <div class="col-6 text-start">
-            {{ user_name }}
+            <span id="header-user-name"></span>
         </div>
     </div>
     <!-- <div class="row pt-2">
@@ -26,23 +26,57 @@
 
 <div id="rounds-wrapper">
 
-    <div id="groups-round-1">
+    <div id="groups-round-1" class="lead text-center">
+
+        In this round, the goal is to find the most similar groups based on your swipes.
+        <br>
+        In this round you are in group<br>
+        <div class="text-center display-4">
+            <span class="user-group">
+                <span class="fs-6">
+                    Loading ... (waiting for others to complete the swiping)
+                </span>
+            </span>
+        </div>  
+
+        <div class="text-center mt-2">
+            <button class="btn btn-primary" disabled>Next round</button>
+        </div>
 
     </div>
 
 
     <div id="groups-round-2">
+        ROUND DESCRIPTION XXX
+        <br>
+        In this round you are in: <br>
+        <div class="text-center display-4">
+            Group <span class="user-group"></span>
+        </div>  
 
+        <div class="text-center">
+            <button class="btn btn-primary" disabled>Next round</button>
+        </div>
     </div>  
 
 
     <div id="groups-round-3">
+        In this round, you will be randomly assigned to a group.
+        <br>
+        In this round you are in: <br>
+        <div class="text-center display-4">
+            Group <span class="user-group"></span>
+        </div>  
 
+        <div class="text-center">
+            <button class="btn btn-primary" disabled>Next round</button>
+        </div>
     </div> 
 
 
     <div id="groups-round-4">
-        
+        This is the last round, you can go and talk to whoever you want. <br>
+        <strong>Thanks for using ByteMe!</strong>
     </div>
 
 </div>

@@ -17,7 +17,9 @@ def explode_items(df, column):
     expanded_df.reset_index(drop=True, inplace=True)
     return expanded_df
 
-def add_swipe_type_id(df, swipe_type):    
+def add_swipe_type_id(df, swipe_type):
+    print(df)
+    print(swipe_type)
     df["swipe_type_id"] = df[swipe_type].apply(lambda x: x.replace(" ", "_").lower()[:15])
     return df
 
@@ -25,22 +27,25 @@ def load_swipe_items(limit=0):
     # exclude userMail from swipe_items
     df = pd.read_csv(
         DATA_PATH + "methods_topics.csv",
-        names=["time", "research_interest", "method"],
+        names=["research_interest", "method"],
         header=0
     )
     methods_df = df[["method"]]
-    research_interest_df = df[["research_interest"]]
+    research_interest_df = df[["research_interest"]]    
 
-    print(methods_df)
+    # methods_df = explode_items(methods_df, "method")
+    # research_interest_df = explode_items(research_interest_df, "research_interest")
 
-    methods_df = explode_items(methods_df, "method")
-    research_interest_df = explode_items(research_interest_df, "research_interest")
+    methods_df.dropna(inplace=True)
+    research_interest_df.dropna(inplace=True)
 
     methods_df = add_swipe_type_id(methods_df, "method")
     research_interest_df = add_swipe_type_id(research_interest_df, "research_interest") 
 
     methods_df["swipe_type"] = "method"
     research_interest_df["swipe_type"] = "research_interest"
+
+    print(methods_df)
 
     if limit > 0:
         methods_df = methods_df.head(limit)
@@ -127,7 +132,9 @@ def save_swipe_preferences(swipe_dict):
             user_swipes_line += SWIPE_PREFERENCES_FILE_SEP.join([                
                 str(swipes[swipe_key]["value"])
             ])
+            user_swipes_line += SWIPE_PREFERENCES_FILE_SEP
 
+        user_swipes_line = user_swipes_line[:-1]
         user_swipes_line += "\n"
         fi.write(user_swipes_line)
 

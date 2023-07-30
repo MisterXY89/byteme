@@ -22,3 +22,10 @@ footer {
     position: absolute;
     bottom: 0;
 }
+
+.interest-cell {
+    max-width: 200px;
+    min-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
