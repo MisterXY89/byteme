@@ -263,16 +263,24 @@ class Recommender:
             for participant in range(big[mmax]):
                 part = recommendations[mmax].pop()
                 recommendations[mmin].append(part)
+
+            big = {
+                k: len(v) - max_size
+                for k, v in recommendations.items()
+                if len(v) > max_size
+            }
+            i = 1
+            while len(big) == 0:
                 big = {
-                    k: len(v) - max_size
-                    for k, v in recommendations.items()
-                    if len(v) > max_size
+                    k: 1 for k, v in recommendations.items() if len(v) > max_size - i
                 }
-                small = {
-                    k: len(v) - min_size
-                    for k, v in recommendations.items()
-                    if len(v) < min_size
-                }
+                i -= 1
+
+            small = {
+                k: len(v) - min_size
+                for k, v in recommendations.items()
+                if len(v) < min_size
+            }
         return recommendations
 
     def _proposeMotivation(self, group_size: int = 5) -> dict:
