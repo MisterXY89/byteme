@@ -1,6 +1,6 @@
 'use strict';
 
-window.preferences = {};
+var preferences = {};
 var progress_perc = 0;
 // var progress_bar = document.querySelector("#progress-bar");
 
@@ -19,12 +19,12 @@ function show_results() {
     swipeResultsWrapper.style.display = "block";    
     tinderWrapper.style.display = "none";
 
-    console.log("SHOW-RESULTS:", window.preferences);
+    console.log("SHOW-RESULTS:", preferences);
 
-    // iterrate over window.preferences keys and show key & value in table,
+    // iterrate over preferences keys and show key & value in table,
     // make the value a checkbox (based on 0 and 1)
 
-    Object.keys(window.preferences).forEach(function (key) {
+    Object.keys(preferences).forEach(function (key) {
         let row = document.createElement("tr");        
 
         let interest_cell = document.createElement("td");
@@ -32,7 +32,7 @@ function show_results() {
         let super_like_cell = document.createElement("td");        
         
         // INTEREST
-        interest_cell.innerHTML = window.preferences[key].text_full;
+        interest_cell.innerHTML = preferences[key].text_full;
 
         // VALUE -> YES/NO
         var is_checked = () => (window.preferences[key].value) == 1 ? "checked" : "";
@@ -57,7 +57,7 @@ function show_results() {
         // SUPER LIKE
         let super_like_html = `
         <div class="pretty p-icon p-round p-plain p-smooth">
-            <input type="radio" name="super_like" />
+            <input type="radio" name="super_like" id='SL-${key}'/>
             <div class="state p-success-o">
                 <i class="icon fa fa-bolt"></i>
                 <label>Superlike</label>
@@ -80,16 +80,16 @@ function show_results() {
 }
 
 function collect_results() {
-    var user_mail = document.getElementById("user_mail").value;
-    console.log("USER-MAIL:", user_mail);
+    /**
+     * Collect the results from the swipe cards
+     */
 
-    // // var super_like = document.querySelector("input[name='super_like']:checked");    
+    var userMail = document.getElementById("user_mail").value;
+    var userName = document.getElementById("user_name").value;
+
+    var superLikeDiv = document.querySelector("input[name='super_like']:checked");    
     var iconHeartDivs = document.getElementsByClassName("like-icon-div");
-    var iconHeartDivsArray = Array.from(iconHeartDivs);
-    console.log("ICON-HEART-ARRAY:", iconHeartDivsArray);
-    
-
-    console.log("BEFORE-RESULTS (COLLECT)", window.preferences);    
+    var iconHeartDivsArray = Array.from(iconHeartDivs);   
 
     // get the checked checkboxes
     for (var i = 0; i < iconHeartDivsArray.length; i++) {
@@ -97,43 +97,38 @@ function collect_results() {
         var offDiv = iconHeartDiv.getElementsByClassName("p-off")[0];
         var cardId = iconHeartDiv.id;
     
-        // console.log(window.preferences[id]);
-        console.log(cardId, offDiv.style.length, offDiv);
-    
-        var updatedValue = offDiv.style.length == 0 ? 1 : 0;
-        window.preferences[cardId].value = updatedValue;
+        var updatedValue = offDiv.checkVisibility() ? 0 : 1;
+        preferences[cardId].value = updatedValue;
+
+        var isSuperLike = superLikeDiv.id.split("-")[1] == cardId ? 1 : 0;
+
+        preferences[cardId].super_like = isSuperLike;
     }
-    console.log("AFTER:", window.preferences);
+    console.log("AFTER:", preferences);
 
 
-    // var results = {
-    //     user_mail: user_mail,
-    //     prefs: window.preferences,
-    //     super_like: super_like
-    // };
+    var results = {
+        user_mail: userMail,
+        user_name: userName,
+        prefs: preferences,        
+    };
 
-    // return results;
-    // return window.preferences;
+    return results;
 }
 
-// SEND SWIPE RESULTS
-sendSwipeResultsBtn.addEventListener("click", (evt) => {
+function sendResults() {
+    /**
+     * Collect & send the results to the server using fetch POST
+     */
 
-    console.log("BEFORE-RESULTS (SEND)", window.preferences);
     var results = collect_results();
-    console.log("COLLECTED-RESULTS:", results);
-
-    // console.log(user_mail);
-    // console.log(window.preferences);
-
-    // send window.preferences to server using fetch POST
     fetch('/swipe', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(
-            { prefs: window.preferences, user_mail: user_mail }
+            results
         )
     })
         .then(response => response.json())
@@ -156,8 +151,8 @@ function initCards(card, index) {
 
 function check_progress() {
     // -2 because of the intro cards (excluded)
-    progress_perc = Math.round(Object.keys(window.preferences).length / (allCards.length-2) * 100);
-    console.log("PROGRESS: " + progress_perc);
+    progress_perc = Math.round(Object.keys(preferences).length / (allCards.length-2) * 100);
+    // console.log("PROGRESS: " + progress_perc);
 
     // progress_bar.style.width = progress_perc + "%";
     // progress_bar.innerHTML = progress_perc + "%";
@@ -177,11 +172,11 @@ function feedback(card, value) {
     var text_full = card.getElementsByClassName("interest-text-full")[0].value;
     var swipe_type = card.getElementsByClassName("swipe-type")[0].value;
 
-    window.preferences[card_id] = {
+    preferences[card_id] = {
         text_full, value, swipe_type
     }
 
-    console.log("FEEDBACK:", window.preferences);
+    // console.log("FEEDBACK:", preferences);
 }
 
 var action_love = (card) => feedback(card, 1);
@@ -279,3 +274,4 @@ var loveListener = createButtonListener(true);
 
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
+sendSwipeResultsBtn.addEventListener('click', sendResults);

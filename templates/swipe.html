@@ -28,6 +28,7 @@
 </div> -->
 
 <input type="hidden" id="user_mail" value="{{ user_mail }}">
+<input type="hidden" id="user_name" value="{{ user_name }}">
 
 <div id="swipe-results" class="p-5">
 
@@ -147,44 +148,5 @@
 
 <!-- Custom JS -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/swipe.js') }}"></script>
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function(event) {
-
-    // console.log("DOM fully loaded and parsed");
-
-    // const intermediateScreen = document.getElementById("intermediate-screen");
-    // const researchInterestIntro = document.getElementById("researchInterestIntro");
-    // const methodIntro = document.getElementById("methodIntro");
-    
-    // const startSwipeTopic = document.getElementById("startSwipeTopic");
-    // const startSwipeMethod = document.getElementById("startSwipeMethod");
-    // const tinderSwipeDiv = document.getElementsByClassName("tinder")[0];
-
-    // researchInterestIntro.style.display = "block";
-
-
-    // startSwipeTopic.addEventListener("click", function() {
-    //     researchInterestIntro.style.display = "none";
-    //     tinderSwipeDiv.style.display = "block";
-    // });
-
-    // last swipe topic:
-    // --> hide tinderSwipeDiv
-    // --> show method intro
-
-    // startSwipeMethod.addEventListener("click", function() {
-    //     methodIntro.style.display = "none";
-    //     intermediateScreen.style.display = "none";
-    //     tinderSwipeDiv.style.display = "block";
-    // });
-
-
-
-
-});
-
-</script>
 
 {% endblock %}
