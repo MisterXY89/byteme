@@ -25,8 +25,6 @@ class Recommender:
             self._df = generate(30, 55, 20)
         else:
             self._df = pd.read_csv(dataPATH, sep=";")
-
-        print(self._df.head())
         self._effort_col = "effort"
         self._pref_col = "preference"
         self._method_cols = [
@@ -216,29 +214,37 @@ class Recommender:
             recommendations = self._proposeSimilar(max_size=7, min_size=3)
 
         if kind == "motivation":
-            recommendations = self._proposeDifferent(group_size)
+            recommendations = self._proposeMotivation(group_size)
 
         if kind == "random":
-            recommendations = self._proposeMotivation(group_size)
+            recommendations = self._proposeRandom(group_size)
 
         return recommendations
 
-    def _proposeMotivation(self, group_size: int = 6) -> dict:
+    def _proposeRandom(self, group_size: int = 6) -> dict:
         groups = {}
         n = self._weighted.shape[0]
         mylist = np.arange(0, n, 1)
         random.shuffle(mylist)
         return {
-            f"group {idx}": mylist[i : i + group_size]
+            f"Group {idx+1}": mylist[i : i + group_size]
             for idx, i in enumerate(range(0, len(mylist), group_size))
         }
 
-    def _proposeSimilar(self, max_size: int = 8, min_size: int = 3) -> dict:
+    def _proposeSimilar(
+        self, max_size: int = 7, min_size: int = 3, group_size: int = 6
+    ) -> dict:
         weighted_df = pd.DataFrame(self._weighted)
         recommendations = {f"Group {i}": [] for i in range(1, weighted_df.shape[1] + 1)}
 
         for idx, participant in weighted_df.iterrows():
-            recommendations[f"Group {participant.idxmax()+1}"].append(idx)
+            recommendations[f"Group {participant.idxmax()+1}"].append(
+                {"Person": idx, "Prob": participant.max()}
+            )
+
+        for k, v in recommendations.items():
+            newlist = sorted(v, key=lambda d: d["Prob"], reverse=True)
+            recommendations[k] = [v["Person"] for v in newlist]
 
         big = {
             k: len(v) - max_size
@@ -251,7 +257,7 @@ class Recommender:
             if len(v) < min_size
         }
 
-        while len(big) > 0 or len(small) > 0:
+        while len(small) > 0:
             mmax = max(big, key=big.get)
             mmin = min(small, key=small.get)
             for participant in range(big[mmax]):
@@ -269,7 +275,7 @@ class Recommender:
                 }
         return recommendations
 
-    def _proposeDifferent(self, group_size: int = 5) -> dict:
+    def _proposeMotivation(self, group_size: int = 5) -> dict:
         data = self._df.copy()
         data = pd.qcut(data.effort, q=group_size).reset_index()
         groups = {}

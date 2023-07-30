@@ -48,8 +48,8 @@ def generate(n: int, research_size: int, method_size: int) -> pd.DataFrame:
     df = pd.DataFrame(data)
     effort_col = "effort"
     pref_col = "preference"
-    research_cols = [f"Research{x}" for x in np.arange(0, research.shape[1], 1)]
-    method_cols = [f"Method_{x}" for x in np.arange(0, methods.shape[1], 1)]
+    research_cols = [f"RESEARCH{x}" for x in np.arange(0, research.shape[1], 1)]
+    method_cols = [f"METHOD{x}" for x in np.arange(0, methods.shape[1], 1)]
     cols = np.hstack([effort_col, pref_col, research_cols, method_cols])
     df.columns = cols
 
