@@ -20,21 +20,37 @@ def results():
     # return "results"
 	return render_template("results.html")
 
+@app.route('/getResults/round/<int:round>/user/<string:user_name>')
+def getResults(matching_round, user_name):
+
+    swipe_preferences = load_swipe_preferences()
+    user_idx = swipe_preferences[swipe_preferences["user_name"] == user_name].index[0]
+    print(user_idx)
+
+    kind_round_list = ["similar", "motivation", "random"]
+    recommender = Recommender()
+    recommender.fit()
+    results = recommender.recommend(kind=kind_round_list[matching_round-1], n=5)
+    
+    # get group for user_idx (where user_idx is in group) - results is a dict with lists
+    user_group = [group for group in results if user_idx in group][0]
+
+    return jsonify({
+        "success": True,
+        # "results": results,
+        "user_group": user_group
+    })
+
 
 @app.route('/checkResults')
 def checkResults():
     # check if all users have swiped & return true/false
     # if true, calculate matches and send along with userMail to all users
 
-    number_items = len(load_swipe_preferences())
+    swipe_prefs = load_swipe_preferences()
+    number_items = len(swipe_prefs)
     results = []
-    results_ready = number_items >= USER_TOTAL
-    if results_ready:
-        # recommender = Recommender()
-        # recommender.fit()
-        # results = recommender.predict()
-        pass
-
+    
     return jsonify({
         "success": True,
         "number_items": number_items,
