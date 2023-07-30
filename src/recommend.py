@@ -217,7 +217,7 @@ class Recommender:
             recommendations = self._proposeMotivation(group_size)
 
         if kind == "random":
-            recommendations = self._proposeRandom(group_size)
+            recommendations = self._proposeRandom(group_number)
 
         return recommendations
 
