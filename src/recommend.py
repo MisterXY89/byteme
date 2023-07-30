@@ -211,7 +211,7 @@ class Recommender:
 
     def recommend(self, kind: str, group_size: int) -> dict:
         if kind == "similar":
-            raise NotImplementedError()
+            recommendations = self._proposeSimilar(max_size=7, min_size=3)
 
         if kind == "motivation":
             recommendations = self._proposeDifferent(group_size)
@@ -232,7 +232,39 @@ class Recommender:
         }
 
     def _proposeSimilar(self, max_size: int = 8, min_size: int = 3) -> dict:
-        raise NotImplementedError()
+        recommendations = {f"Group {i}": [] for i in range(1, weighted_df.shape[1] + 1)}
+
+        for idx, participant in weighted_df.iterrows():
+            recommendations[f"Group {participant.idxmax()+1}"].append(idx)
+
+        big = {
+            k: len(v) - max_size
+            for k, v in recommendations.items()
+            if len(v) > max_size
+        }
+        small = {
+            k: min_size - len(v)
+            for k, v in recommendations.items()
+            if len(v) < min_size
+        }
+
+        while len(big) > 0 or len(small) > 0:
+            mmax = max(big, key=big.get)
+            mmin = min(small, key=small.get)
+            for participant in range(big[mmax]):
+                part = recommendations[mmax].pop()
+                recommendations[mmin].append(part)
+                big = {
+                    k: len(v) - max_size
+                    for k, v in recommendations.items()
+                    if len(v) > max_size
+                }
+                small = {
+                    k: len(v) - min_size
+                    for k, v in recommendations.items()
+                    if len(v) < min_size
+                }
+        return recommendations
 
     def _proposeDifferent(self, group_size: int = 5) -> dict:
         data = self._df.copy()
