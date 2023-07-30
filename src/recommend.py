@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 import numpy as np
+import matplotlib.patches as mpatches
 
 from simData import generate
 
@@ -120,11 +121,92 @@ class Recommender:
         return result
 
     def plotProbabilites(self):
-        plt.show()
+        xrange = np.arange(0, self._research.shape[1], 1)
+        labels = [str(x + 1) for x in range(self._methods.shape[1])]
 
-    def recommend_similar(round: str):
+        with plt.style.context("seaborn-whitegrid"):
+            fig, ax = plt.subplots(
+                1, 2, constrained_layout=True, figsize=(10, 3), sharey=True
+            )
+            for xe, ye in zip(xrange, self._methods.T):
+                x = np.linspace(xe - 0.2, xe - 0.05, len(ye))
+                ax[0].scatter(x, ye, c="gray")
+            for xe, ye in zip(xrange, self._research.T):
+                x = np.linspace(xe + 0.05, xe + 0.2, len(ye))
+                ax[0].scatter(x, ye, c="orange")
+            for xe, ye in zip(xrange, self._weighted.T):
+                x = np.linspace(xe - 0.2, xe + 0.2, len(ye))
+                ax[1].scatter(x, ye, c="gray")
+
+            orange_patch = mpatches.Patch(color="orange", label="Research Clusters")
+            gray_patch = mpatches.Patch(color="gray", label="Method Clusters")
+
+            ax[0].legend(handles=[gray_patch, orange_patch])
+
+            ax[0].set_xticks(xrange)
+            ax[1].set_xticks(xrange)
+            ax[0].set_xticklabels(labels)
+            ax[1].set_xticklabels(labels)
+            ax[0].set_title("Comparison of Cluster Output for both topics")
+            ax[1].set_title("Comparison of weighted Cluster Output")
+            fig.supylabel("Probability of belonging to Cluster")
+            fig.supxlabel("Cluster")
+            plt.show()
+
+    def explainProbabilities(self, person: int):
+        ticks = np.arange(0, self._methods.shape[1], 1)
+        labels = [str(x + 1) for x in range(self._methods.shape[1])]
+
+        with plt.style.context("seaborn-whitegrid"):
+            fig, ax = plt.subplots(
+                1, 2, constrained_layout=True, figsize=(10, 3), sharey=True
+            )
+            ax[0].scatter(
+                ticks - 0.1,
+                self._methods[person, :],
+                label="Method Cluster",
+                color="gray",
+            )
+            ax[0].scatter(
+                ticks + 0.1,
+                self._research[person, :],
+                label="Research Group",
+                color="orange",
+            )
+            ax[1].scatter(ticks, self._weighted[person, :], color="gray")
+            ax[0].legend()
+            ax[0].set_title("Comparison of Cluster Output for both topics")
+
+            ax[0].set_xticks(ticks)
+            ax[1].set_xticks(ticks)
+            ax[0].set_xticklabels(labels)
+            ax[1].set_xticklabels(labels)
+            ax[1].set_title("Comparison of weighted Cluster Output")
+            fig.supylabel("Probability of belonging to Cluster")
+            fig.supxlabel("Cluster")
+            plt.show()
+
+    def plotEffort(self):
+        with plt.style.context("seaborn-whitegrid"):
+            fig, ax = plt.subplot_mosaic(
+                "B", tight_layout=True, figsize=(3, 3), sharey=True
+            )
+            ax["B"].boxplot(
+                self._df.loc[:, self._effort_col],
+                notch=True,
+                flierprops=dict(markerfacecolor="b", marker="D"),
+            )
+            ax["B"].set_xticklabels("")
+            ax["B"].set_ylabel("Willingness to put in effort")
+            x = np.linspace(0.9, 1.1, len(self._df))
+            ax["B"].scatter(x, self._df.loc[:, self._effort_col], alpha=0.2, c="gray")
+            plt.show()
+
+    def recommend_similar(round: str, group_nums: int):
+        recommendations = {f"group {i}": {} for i in range(1, group_nums + 1)}
         if round == "similar":
             raise NotImplementedError()
+
         if round == "different":
             raise NotImplementedError()
         if round == "random":
