@@ -4,7 +4,6 @@ import bayespy.plot as bpplt
 import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
-import numbers as np
 
 
 class Recommender:
@@ -22,7 +21,10 @@ class Recommender:
 
     def fit(self):
         """_summary_"""
-        self.Z, self.R = self.BernoulliMixture(self.df.iloc[:, 7:].astype("int").values)
+        self.Z, self.R, self.X = self.BernoulliMixture(
+            self.df.iloc[:, 7:].astype("int").values
+        )
+        return self.Z, self.R, self.X
 
     def BernoulliMixture(self, x, cluster: int = 10):
         """Here, Z defines the group assignments and P the answering probability patterns for each group.
@@ -41,18 +43,20 @@ class Recommender:
         N = x.shape[0]
         D = x.shape[1]
 
-        # uninformative Dirichlet prior
+        # conjugate Beta priors for Bernoulli Distribution
+        P = Beta([0.5, 0.5], plates=(D, cluster), name="P")
+
+        # uninformative Dirichlet prior for Multinomial Discrete Variables
         R = Dirichlet(cluster * [1e-5], name="R")
 
         # categorical distribution for the group assignments
         Z = Categorical(R, plates=(N, 1), name="Z")
 
-        # beta priors for probability of a yes answer
-        P = Beta([0.5, 0.5], plates=(D, cluster), name="P")
-
-        # The answers of the candidates are modelled with the Bernoulli distribution:
+        # Constructing Model with Bayes Theorem
+        # Bernoulli mixture likelihood with beta prior
         X = Mixture(Z, Bernoulli, P)
 
+        # Bayesian Inference: Expectation Maximization
         Q = VB(Z, R, X, P)
 
         # random initialization for the group probability patterns
@@ -63,7 +67,11 @@ class Recommender:
 
         # run inference
         Q.update(repeat=1000, verbose=False)
-        return Z, R
+        return (
+            Z,
+            R,
+            X,
+        )
 
     def plot(self):
         # plot effective number of found groups
