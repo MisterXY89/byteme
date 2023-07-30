@@ -146,6 +146,7 @@ function sendResults() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
+            window.location.href = "/results";
         });
 }
 

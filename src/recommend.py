@@ -6,7 +6,10 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-from simData import generate
+try:
+    from src.simData import generate
+except:
+    from .simData import generate
 
 
 class Recommender:

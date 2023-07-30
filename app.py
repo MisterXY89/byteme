@@ -30,9 +30,10 @@ def checkResults():
     results = []
     results_ready = number_items >= USER_TOTAL
     if results_ready:
-        recommender = Recommender()
-        recommender.fit()
-        results = recommender.predict()
+        # recommender = Recommender()
+        # recommender.fit()
+        # results = recommender.predict()
+        pass
 
     return jsonify({
         "success": True,
