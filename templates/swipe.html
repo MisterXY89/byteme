@@ -49,7 +49,7 @@
 
         </table>
 
-        <button type="button" class="btn btn-primary text-end" id="sendSwipeResults">Send results</button>
+        <a class="btn btn-primary text-end" id="sendSwipeResults">Send results</a>
 
     </div>
 
@@ -74,6 +74,7 @@
                         <p class="text-start p-4 pt-0 pb-2">
                             {{ item['research_interest'] }}
                             <input type="hidden" class="interest-text-full" value="{{ item['research_interest'] }}">
+                            <input type="hidden" class="swipe-type" value="{{ item['swipe_type'] }}">
                         </p>
                         <div class="mx-auto text-center">
                             <img src="{{ url_for('static', filename='images/ByteMe_logo.jpeg') }}" height="170px" class="position-absolute bottom-0 start-50 translate-middle-x pb-3">
@@ -91,6 +92,7 @@
                         <p class="text-start p-4 pt-0 pb-2">
                             {{ item['method'] }}
                             <input type="hidden" class="interest-text-full" value="{{ item['method'] }}">
+                            <input type="hidden" class="swipe-type" value="{{ item['swipe_type'] }}">
                         </p>
                         <div class="mx-auto text-center">
                             <img src="{{ url_for('static', filename='images/ByteMe_logo.jpeg') }}" height="170px" class="position-absolute bottom-0 start-50 translate-middle-x pb-3">

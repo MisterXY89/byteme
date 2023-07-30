@@ -1,6 +1,7 @@
 'use strict';
 
-var preferences = {};
+window.preferences = {};
+var progress_perc = 0;
 // var progress_bar = document.querySelector("#progress-bar");
 
 var tinderContainer = document.querySelector('.tinder');
@@ -8,42 +9,36 @@ var allCards = document.querySelectorAll('.tinder--card');
 var nope = document.getElementById('nope');
 var love = document.getElementById('love');
 
-
 var divResults = document.getElementById("swiped-items");
 var swipeResultsWrapper = document.getElementById("swipe-results");
 var sendSwipeResultsBtn = document.getElementById("sendSwipeResults");
 var tinderWrapper = document.getElementsByClassName("tinder")[0];
 
-var progress_perc = 0;
 
 function show_results() {
     swipeResultsWrapper.style.display = "block";    
     tinderWrapper.style.display = "none";
 
-    // iterrate over preferences keys and show key & value in table,
+    console.log("SHOW-RESULTS:", window.preferences);
+
+    // iterrate over window.preferences keys and show key & value in table,
     // make the value a checkbox (based on 0 and 1)
 
-    Object.keys(preferences).forEach(function (key) {
-        console.log(key, preferences[key]);
-        let row = document.createElement("tr");
-
-        if (preferences[key].text_full == "__intro__") {
-            return false;
-        }
+    Object.keys(window.preferences).forEach(function (key) {
+        let row = document.createElement("tr");        
 
         let interest_cell = document.createElement("td");
         let value_cell = document.createElement("td");
         let super_like_cell = document.createElement("td");        
         
         // INTEREST
-        interest_cell.innerHTML = preferences[key].text_full;
-
-        var is_checked = () => preferences[key] == 1 ? "checked" : "";
+        interest_cell.innerHTML = window.preferences[key].text_full;
 
         // VALUE -> YES/NO
+        var is_checked = () => (window.preferences[key].value) == 1 ? "checked" : "";
         let checkbox_html = `
-        <div class="pretty p-icon p-toggle p-plain">
-            <input type="checkbox" ${is_checked()} id='${key}'/>
+        <div class="pretty p-icon p-toggle p-plain like-icon-div" id='${key}'>
+            <input type="checkbox" ${is_checked()}/>
             <div class="state p-off">
                 <i class="icon fa fa-heart-o "></i>
                 <label>Nope</label>
@@ -55,7 +50,7 @@ function show_results() {
         </div>`;        
         // let checkbox = document.createElement("input");
         // checkbox.type = "checkbox";
-        // checkbox.checked = preferences[key];
+        // checkbox.checked = d[key];
         // value_cell.appendChild(checkbox);
         value_cell.innerHTML = checkbox_html;
 
@@ -84,27 +79,68 @@ function show_results() {
 
 }
 
-function send_results() {
-    let user_mail = document.getElementById("user_mail").value;
+function collect_results() {
+    var user_mail = document.getElementById("user_mail").value;
+    console.log("USER-MAIL:", user_mail);
 
-    console.log(user_mail);
-    console.log(preferences);
+    // // var super_like = document.querySelector("input[name='super_like']:checked");    
+    var iconHeartDivs = document.getElementsByClassName("like-icon-div");
+    var iconHeartDivsArray = Array.from(iconHeartDivs);
+    console.log("ICON-HEART-ARRAY:", iconHeartDivsArray);
+    
 
-    // send preferences to server using fetch POST
+    console.log("BEFORE-RESULTS (COLLECT)", window.preferences);    
+
+    // get the checked checkboxes
+    for (var i = 0; i < iconHeartDivsArray.length; i++) {
+        var iconHeartDiv = iconHeartDivsArray[i];
+        var offDiv = iconHeartDiv.getElementsByClassName("p-off")[0];
+        var cardId = iconHeartDiv.id;
+    
+        // console.log(window.preferences[id]);
+        console.log(cardId, offDiv.style.length, offDiv);
+    
+        var updatedValue = offDiv.style.length == 0 ? 1 : 0;
+        window.preferences[cardId].value = updatedValue;
+    }
+    console.log("AFTER:", window.preferences);
+
+
+    // var results = {
+    //     user_mail: user_mail,
+    //     prefs: window.preferences,
+    //     super_like: super_like
+    // };
+
+    // return results;
+    // return window.preferences;
+}
+
+// SEND SWIPE RESULTS
+sendSwipeResultsBtn.addEventListener("click", (evt) => {
+
+    console.log("BEFORE-RESULTS (SEND)", window.preferences);
+    var results = collect_results();
+    console.log("COLLECTED-RESULTS:", results);
+
+    // console.log(user_mail);
+    // console.log(window.preferences);
+
+    // send window.preferences to server using fetch POST
     fetch('/swipe', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(
-            { preferences, user_mail }
+            { prefs: window.preferences, user_mail: user_mail }
         )
     })
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
         });
-}
+});
 
 function initCards(card, index) {
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
@@ -118,6 +154,39 @@ function initCards(card, index) {
     tinderContainer.classList.add('loaded');
 }
 
+function check_progress() {
+    // -2 because of the intro cards (excluded)
+    progress_perc = Math.round(Object.keys(window.preferences).length / (allCards.length-2) * 100);
+    console.log("PROGRESS: " + progress_perc);
+
+    // progress_bar.style.width = progress_perc + "%";
+    // progress_bar.innerHTML = progress_perc + "%";
+
+    if (progress_perc == 100) {
+        show_results();
+    }
+}
+
+function feedback(card, value) {
+    var card_id = card.id;
+
+    if (card_id == "research_interest_intro" || card_id == "method_intro") {
+        return false;
+    }
+
+    var text_full = card.getElementsByClassName("interest-text-full")[0].value;
+    var swipe_type = card.getElementsByClassName("swipe-type")[0].value;
+
+    window.preferences[card_id] = {
+        text_full, value, swipe_type
+    }
+
+    console.log("FEEDBACK:", window.preferences);
+}
+
+var action_love = (card) => feedback(card, 1);
+var action_nope = (card) => feedback(card, 0);
+
 initCards();
 
 allCards.forEach(function (el, index) {
@@ -126,10 +195,7 @@ allCards.forEach(function (el, index) {
     hammertime.on('pan', function (event) {
         el.classList.add('moving');
 
-         // if last card is removed, redirect to results page
-         if (progress_perc == 100) {
-            show_results();
-        }
+        check_progress();
     });
 
     hammertime.on('pan', function (event) {
@@ -145,31 +211,15 @@ allCards.forEach(function (el, index) {
 
         event.target.style.transform = 'translate(' + event.deltaX + 'px, ' + event.deltaY + 'px) rotate(' + rotate + 'deg)';
 
-        // if last card is removed, redirect to results page
-        if (progress_perc == 100) {
-            show_results();
-        }
+        check_progress();
     });
 
     hammertime.on('panend', function (event) {
-        var card_id = el.id;
 
-        console.log(card_id);
-
-        if (card_id == "researchInterestIntro" || card_id == "methodIntro") {
-            return false;
-        }
-
-        if (tinderContainer.classList.contains('tinder_love')) {
-            preferences[card_id] = {
-                text_full: text_full,
-                value: 1
-            };
+        if (tinderContainer.classList.contains('tinder_love')) {            
+            action_love(el);
         } else if (tinderContainer.classList.contains('tinder_nope')) {
-            preferences[card_id] = {
-                text_full: text_full,
-                value: 1
-            };
+            action_nope(el);
         }
 
         el.classList.remove('moving');
@@ -178,12 +228,7 @@ allCards.forEach(function (el, index) {
 
         var moveOutWidth = document.body.clientWidth;
         var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
-
-        progress_perc = Math.round(Object.keys(preferences).length / allCards.length * 100);
-        // progress_bar.style.width = progress_perc + "%";
-        // progress_bar.innerHTML = progress_perc + "%";
-        
-
+       
         event.target.classList.toggle('removed', !keep);
 
         if (keep) {
@@ -200,11 +245,8 @@ allCards.forEach(function (el, index) {
             event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
             initCards();
         }
- 
-        // if last card is removed, redirect to results page
-        if (progress_perc == 100) {
-            show_results();
-        }
+        
+        check_progress();
     });
 });
 
@@ -215,46 +257,19 @@ function createButtonListener(love) {
 
         if (!cards.length) return false;
 
-        var card = cards[0];
-        var card_id = card.id;
-        console.log(card_id);
-        
-        var text_full = "__intro__";
-        if (card_id != "research_interest_intro" && card_id != "method_intro") {
-            text_full = card.getElementsByClassName("interest-text-full")[0].value;
-        }     
-
+        var card = cards[0];               
         card.classList.add('removed');
-
 
         if (love) {
             card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
-            // TODO: store the user's choice in the database            
-            preferences[card_id] = {
-                text_full: text_full,
-                value: 1
-            };
+            action_love(card);
         } else {
             card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
-            // TODO: store the user's choice in the database
-            preferences[card_id] = {
-                text_full: text_full,
-                value: 0
-            };
-        }
+            action_nope(card);
+        }        
 
-        console.log(preferences);
-        progress_perc = Math.round(Object.keys(preferences).length / (allCards.length) * 100);
-
-        console.log("BTN: " + progress_perc)
-        
-
-        if (progress_perc == 100) {
-            show_results();
-        }
-
+        check_progress();
         initCards();
-
         event.preventDefault();
     };
 }
@@ -264,5 +279,3 @@ var loveListener = createButtonListener(true);
 
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
-
-sendSwipeResultsBtn.addEventListener("click", send_results);
