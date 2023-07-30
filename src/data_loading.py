@@ -6,7 +6,7 @@ import pandas as pd
 DATA_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data")) + "/"
 
 # get absolute path of swipe_preferences.csv
-SWIPE_PREFERENCES_FILE = DATA_PATH + "swipe_preferences.csv"
+SWIPE_PREFERENCES_FILE = DATA_PATH + "data.csv"
 SWIPE_PREFERENCES_FILE_SEP = ";"
 
 
