@@ -211,7 +211,7 @@ class Recommender:
 
     def recommend(self, kind: str, group_size: int) -> dict:
         if kind == "similar":
-            recommendations = self._proposeSimilar(max_size=7, min_size=3)
+            recommendations = self._proposeSimilar(max_size=7, min_size=4)
 
         if kind == "motivation":
             recommendations = self._proposeMotivation(group_size)
@@ -221,14 +221,14 @@ class Recommender:
 
         return recommendations
 
-    def _proposeRandom(self, group_size: int = 6) -> dict:
+    def _proposeRandom(self, group_number: int = 6) -> dict:
         groups = {}
         n = self._weighted.shape[0]
         mylist = np.arange(0, n, 1)
         random.shuffle(mylist)
         return {
-            f"Group {idx+1}": mylist[i : i + group_size]
-            for idx, i in enumerate(range(0, len(mylist), group_size))
+            f"Group {idx+1}": mylist[i : i + group_number]
+            for idx, i in enumerate(range(0, len(mylist), group_number))
         }
 
     def _proposeSimilar(
