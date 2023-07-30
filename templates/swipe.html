@@ -38,7 +38,7 @@
         <table class="table">
 
             <thead>
-                <th scope="col"> Research Interests </th>
+                <th scope="col"> Interests (incl. methods and research) </th>
                 <th scope="col"> Preference </th>
                 <th scope="col"> Superlike </th>
             </thead>
@@ -73,6 +73,7 @@
                         <h3 class="fw-bold">Research Interest <i class="fa fa-book" aria-hidden="true"></i></h3>
                         <p class="text-start p-4 pt-0 pb-2">
                             {{ item['research_interest'] }}
+                            <input type="hidden" class="interest-text-full" value="{{ item['research_interest'] }}">
                         </p>
                         <div class="mx-auto text-center">
                             <img src="{{ url_for('static', filename='images/ByteMe_logo.jpeg') }}" height="170px" class="position-absolute bottom-0 start-50 translate-middle-x pb-3">
@@ -89,6 +90,7 @@
                         <h3 class="fw-bold">Method <i class="fa fa-code text-end" aria-hidden="true"></i></h3>
                         <p class="text-start p-4 pt-0 pb-2">
                             {{ item['method'] }}
+                            <input type="hidden" class="interest-text-full" value="{{ item['method'] }}">
                         </p>
                         <div class="mx-auto text-center">
                             <img src="{{ url_for('static', filename='images/ByteMe_logo.jpeg') }}" height="170px" class="position-absolute bottom-0 start-50 translate-middle-x pb-3">
