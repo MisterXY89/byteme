@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import matplotlib.patches as mpatches
+import random
 
 try:
     from simData import generate
@@ -21,7 +22,7 @@ class Recommender:
     def __init__(self, sim: bool = False):
         dataPATH = Path(__file__).parent.parent.joinpath("data").joinpath("data.csv")
         if sim:
-            self._df = generate(30, 25, 17)
+            self._df = generate(30, 55, 20)
         else:
             self._df = pd.read_csv(dataPATH)
         self._effort_col = "effort"
@@ -32,14 +33,15 @@ class Recommender:
         self._research_cols = [
             col for col in self._df.columns if col.startswith("Research")
         ]
-        self._process()
+        self._df["preference_weighted"] = self._normalise(
+            self._df[self._pref_col], max_val=0.7, min_val=0.3
+        )
+        self._df["effort_weighted"] = self._normalise(
+            self._df[self._effort_col], max_val=0.6, min_val=0.4
+        )
 
-    def _process(self, range: list = (0.3, 0.7)) -> None:
-        pref = self._df.loc[:, self._pref_col]
-        pref_weighted = (pref - min(pref)) / (max(pref) - min(pref)) * (
-            range[1] - range[0]
-        ) + range[0]
-        self._df["preference_weighted"] = pref_weighted
+    def _normalise(self, col, max_val: int, min_val: int):
+        return (col - min(col)) / (max(col) - min(col)) * (max_val - min_val) + min_val
 
     def fit(self, cluster_size: int = 6, weight: bool = True) -> dict:
         col = self._pref_col
@@ -133,7 +135,7 @@ class Recommender:
             )
             for xe, ye in zip(xrange, self._methods.T):
                 x = np.linspace(xe - 0.2, xe - 0.05, len(ye))
-                ax[0].scatter(x, ye, c="gray")
+                ax[0].scatter(x, ye, c="green")
             for xe, ye in zip(xrange, self._research.T):
                 x = np.linspace(xe + 0.05, xe + 0.2, len(ye))
                 ax[0].scatter(x, ye, c="orange")
@@ -142,9 +144,9 @@ class Recommender:
                 ax[1].scatter(x, ye, c="gray")
 
             orange_patch = mpatches.Patch(color="orange", label="Research Clusters")
-            gray_patch = mpatches.Patch(color="gray", label="Method Clusters")
+            green_patch = mpatches.Patch(color="green", label="Method Clusters")
 
-            ax[0].legend(handles=[gray_patch, orange_patch])
+            ax[0].legend(handles=[green_patch, orange_patch])
 
             ax[0].set_xticks(xrange)
             ax[1].set_xticks(xrange)
@@ -168,7 +170,7 @@ class Recommender:
                 ticks - 0.1,
                 self._methods[person, :],
                 label="Method Cluster",
-                color="gray",
+                color="green",
             )
             ax[0].scatter(
                 ticks + 0.1,
@@ -199,21 +201,47 @@ class Recommender:
                 notch=True,
                 flierprops=dict(markerfacecolor="b", marker="D"),
             )
+            # ax["B"].hlines(y=[np.quantile()])
+
             ax["B"].set_xticklabels("")
             ax["B"].set_ylabel("Willingness to put in effort")
             x = np.linspace(0.9, 1.1, len(self._df))
             ax["B"].scatter(x, self._df.loc[:, self._effort_col], alpha=0.2, c="gray")
             plt.show()
 
-    def recommend_similar(round: str, group_nums: int):
-        recommendations = {f"group {i}": {} for i in range(1, group_nums + 1)}
-        if round == "similar":
+    def recommend(self, kind: str, group_size: int) -> dict:
+        if kind == "similar":
             raise NotImplementedError()
 
-        if round == "different":
-            raise NotImplementedError()
-        if round == "random":
-            raise NotImplementedError()
+        if kind == "motivation":
+            recommendations = self._proposeDifferent(group_size)
+
+        if kind == "random":
+            recommendations = self._proposeMotivation(group_size)
+
+        return recommendations
+
+    def _proposeMotivation(self, group_size: int = 6) -> dict:
+        groups = {}
+        n = self._weighted.shape[0]
+        mylist = np.arange(0, n, 1)
+        random.shuffle(mylist)
+        return {
+            f"group {idx}": mylist[i : i + group_size]
+            for idx, i in enumerate(range(0, len(mylist), group_size))
+        }
+
+    def _proposeSimilar(self, max_size: int = 8, min_size: int = 3) -> dict:
+        raise NotImplementedError()
+
+    def _proposeDifferent(self, group_size: int = 5) -> dict:
+        data = self._df.copy()
+        data = pd.qcut(data.effort, q=group_size).reset_index()
+        groups = {}
+        for idx, group in enumerate(data.effort.unique()):
+            groups[f"Group {idx+1}"] = data.loc[data.effort == group, "index"].values
+
+        return groups
 
 
 if __name__ == "__main__":
