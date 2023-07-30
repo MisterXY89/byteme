@@ -234,6 +234,7 @@ class Recommender:
         }
 
     def _proposeSimilar(self, max_size: int = 8, min_size: int = 3) -> dict:
+        weighted_df = pd.DataFrame(self._weighted)
         recommendations = {f"Group {i}": [] for i in range(1, weighted_df.shape[1] + 1)}
 
         for idx, participant in weighted_df.iterrows():
