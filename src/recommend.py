@@ -8,8 +8,8 @@ import numpy as np
 import matplotlib.patches as mpatches
 
 try:
-    from src.simData import generate
-except:
+    from simData import generate
+except Exception as e:
     from .simData import generate
 
 
