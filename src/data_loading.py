@@ -83,7 +83,7 @@ def get_name2id_dict(prefs, force=False):
     return topic_to_id_df
 
 def prepare_pref_file(interest_keys, force=False):
-    header_cols = ["user_mail", "user_name", "preference", "effort", "full_text"] + interest_keys
+    header_cols = ["user_mail", "user_name", "preference", "effort"] + interest_keys
 
     if not os.path.isfile(SWIPE_PREFERENCES_FILE) or force:
         print("swipe_preferences.csv does not exist")
@@ -121,12 +121,12 @@ def save_swipe_preferences(swipe_dict):
             str(swipe_dict["effort"])
         ])
         user_swipes_line += SWIPE_PREFERENCES_FILE_SEP
+        # user_swipes_line += str(swipe_dict["full_text"]) + SWIPE_PREFERENCES_FILE_SEP
         for swipe_key in swipes:
             print(str(swipes[swipe_key]["value"]))
             user_swipes_line += SWIPE_PREFERENCES_FILE_SEP.join([                
                 str(swipes[swipe_key]["value"])
             ])
-            user_swipes_line += SWIPE_PREFERENCES_FILE_SEP
 
         user_swipes_line += "\n"
         fi.write(user_swipes_line)

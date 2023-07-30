@@ -4,7 +4,10 @@ footer {
 }
 
 #swipe-results,
-#step-2-form
+#step-2-form,
+#groups-round-2,
+#groups-round-3,
+#groups-round-4
 {
     display: none;
 }

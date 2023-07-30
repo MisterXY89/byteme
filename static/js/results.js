@@ -7,11 +7,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const round4 = document.querySelector('#groups-round-4');
     const rounds = [round1, round2, round3, round4];
 
-    function get_rounds(round) {
+    // parse user_name from url by ?user_name=
+    let user_name = window.location.search.split("=")[1];
 
-        // parse user_name from url by ?user_name=
-        let user_name = window.location.search.split("=")[1];
-        console.log(user_name);
+    // header-user-name 
+    document.querySelector("#header-user-name").innerHTML = user_name;
+
+    console.log(user_name);
+
+    function getRounds(round) {       
+        
+        console.log(round);
 
         // hide all rounds that are not the current round
         for (let i = 0; i < rounds.length; i++) {
@@ -25,11 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // add loading msg to 'user-group' div
         rounds[round - 1].querySelector(".user-group").innerHTML = "Loading...";
 
-        let url = (round, user_name) = `/getResults/round/${round}/user/${user_name}`
+        let url = (round, user_name) => `/getResults/round/${round}/user/${user_name}`
         fetch(url(round, user_name))
             .then(response => response.json())
             .then(data => {
+
+                console.log(data);
+
                 rounds[round - 1].querySelector(".user-group").innerHTML = data.user_group;
+
+                // enable next round button
+                rounds[round - 1].querySelector("button").disabled = false;
+                rounds[round - 1].addEventListener('click', () => {
+                    getRounds(round + 1);
+                });
+                
             });
 
     }
@@ -39,9 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
 
-                if (data.results.length > 0) {
+                console.log(data);
+
+                if (data.ready) {
                     clearInterval(refreshIntervalId);
-                    get_rounds(1);
+                    getRounds(1);
                 }
 
             });
