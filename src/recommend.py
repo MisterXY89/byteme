@@ -231,9 +231,7 @@ class Recommender:
             for idx, i in enumerate(range(0, len(mylist), group_number))
         }
 
-    def _proposeSimilar(
-        self, max_size: int = 7, min_size: int = 3, group_size: int = 6
-    ) -> dict:
+    def _proposeSimilar(self, max_size: int = 7, min_size: int = 3) -> dict:
         weighted_df = pd.DataFrame(self._weighted)
         recommendations = {f"Group {i}": [] for i in range(1, weighted_df.shape[1] + 1)}
 
@@ -251,6 +249,10 @@ class Recommender:
             for k, v in recommendations.items()
             if len(v) > max_size
         }
+        i = 1
+        while len(big) == 0:
+            big = {k: 1 for k, v in recommendations.items() if len(v) > max_size - i}
+            i -= 1
         small = {
             k: min_size - len(v)
             for k, v in recommendations.items()
@@ -269,12 +271,6 @@ class Recommender:
                 for k, v in recommendations.items()
                 if len(v) > max_size
             }
-            i = 1
-            while len(big) == 0:
-                big = {
-                    k: 1 for k, v in recommendations.items() if len(v) > max_size - i
-                }
-                i -= 1
 
             small = {
                 k: len(v) - min_size
