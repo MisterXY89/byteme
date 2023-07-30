@@ -5,15 +5,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const round2 = document.querySelector('#groups-round-2');
     const round3 = document.querySelector('#groups-round-3');
     const round4 = document.querySelector('#groups-round-4');
+    const rounds = [round1, round2, round3, round4];
+
+    function get_rounds(round) {
+
+        // hide all rounds that are not the current round
+        for (let i = 0; i < rounds.length; i++) {
+            if (i != round - 1) {
+                rounds[i].style.display = "none";
+            } else {
+                rounds[i].style.display = "block";
+            }
+        }
+
+        // add loading msg to 'user-group' div
+        rounds[round - 1].querySelector(".user-group").innerHTML = "Loading...";
+
+        let url = (round, usr) = `/getResults/round/${round}/user/${usr}`
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                rounds[round - 1].querySelector(".user-group").innerHTML = data.user_group;
+            });
+
+    }
+
+    function checkForResults() {
+        fetch('/checkResults')
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.results.length > 0) {
+                    clearInterval(refreshIntervalId);
+                    get_rounds(1);
+                }
+
+            });
+    }
+
 
     // ping server for results every 5 seconds
-    setInterval(() => {
-        fetch('/checkResults')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            document.querySelector('#results').innerHTML = data.results;
-        });
-    }, 5000);
-    
+    var refreshIntervalId = setInterval(checkForResults, 5000);
+
 });
