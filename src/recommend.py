@@ -24,14 +24,16 @@ class Recommender:
         if sim:
             self._df = generate(30, 55, 20)
         else:
-            self._df = pd.read_csv(dataPATH)
+            self._df = pd.read_csv(dataPATH, sep=";")
+
+        print(self._df.head())
         self._effort_col = "effort"
         self._pref_col = "preference"
         self._method_cols = [
-            col for col in self._df.columns if col.startswith("Method")
+            col for col in self._df.columns if col.startswith("METHOD")
         ]
         self._research_cols = [
-            col for col in self._df.columns if col.startswith("Research")
+            col for col in self._df.columns if col.startswith("RESEARCH")
         ]
         self._df["preference_weighted"] = self._normalise(
             self._df[self._pref_col], max_val=0.7, min_val=0.3
