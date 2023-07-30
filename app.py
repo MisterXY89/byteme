@@ -20,7 +20,7 @@ def results():
     # return "results"
 	return render_template("results.html")
 
-@app.route('/getResults/round/<int:round>/user/<str:user_name>')
+@app.route('/getResults/round/<int:round>/user/<string:user_name>')
 def getResults(matching_round, user_name):
 
     swipe_preferences = load_swipe_preferences()
