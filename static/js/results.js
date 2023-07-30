@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function get_rounds(round) {
 
+        // parse user_name from url by ?user_name=
+        let user_name = window.location.search.split("=")[1];
+        console.log(user_name);
+
         // hide all rounds that are not the current round
         for (let i = 0; i < rounds.length; i++) {
             if (i != round - 1) {
@@ -21,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // add loading msg to 'user-group' div
         rounds[round - 1].querySelector(".user-group").innerHTML = "Loading...";
 
-        let url = (round, usr) = `/getResults/round/${round}/user/${usr}`
-        fetch(url)
+        let url = (round, user_name) = `/getResults/round/${round}/user/${user_name}`
+        fetch(url(round, user_name))
             .then(response => response.json())
             .then(data => {
                 rounds[round - 1].querySelector(".user-group").innerHTML = data.user_group;
