@@ -6,6 +6,8 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
+from simData import generate
+
 
 class Recommender:
     """Class implementing a cluster algorithm
@@ -13,28 +15,54 @@ class Recommender:
     """
 
     def __init__(self, sim: bool = False):
-        path = Path(__file__).parent.parent.joinpath("data")
+        dataPATH = Path(__file__).parent.parent.joinpath("data").joinpath("data.csv")
         if sim:
-            dataPATH = path / "dummy.csv"
+            self._df = generate(30, 25, 17)
         else:
-            dataPATH = path / "data.csv"
-        self._df = pd.read_csv(dataPATH)
-        self.model = {}
-        self._method_cols = (str(x) for x in np.arange(22, 32, 1))
-        self._research_cols = (str(x) for x in np.arange(2, 22, 1))
+            self._df = pd.read_csv(dataPATH)
+        self._effort_col = "effort"
+        self._pref_col = "preference"
+        self._method_cols = [
+            col for col in self._df.columns if col.startswith("Method")
+        ]
+        self._research_cols = [
+            col for col in self._df.columns if col.startswith("Research")
+        ]
+        self._process()
 
-    def fit(self, cluster_size: int = 6):
-        """_summary_"""
-        self.model["research"] = self._BernoulliMixture(
+    def _process(self, range: list = (0.3, 0.7)) -> None:
+        pref = self._df.loc[:, self._pref_col]
+        pref_weighted = (pref - min(pref)) / (max(pref) - min(pref)) * (
+            range[1] - range[0]
+        ) + range[0]
+        self._df["preference_weighted"] = pref_weighted
+
+    def fit(self, cluster_size: int = 6, weight: bool = True) -> dict:
+        col = self._pref_col
+        if weight:
+            col = "preference_weighted"
+        weights = self._df[col]
+
+        research = self._BernoulliMixture(
             self._df.loc[:, self._research_cols].astype("int").values,
             cluster_size=cluster_size,
         )
 
-        self.model["methods"] = self._BernoulliMixture(
+        methods = self._BernoulliMixture(
             self._df.loc[:, self._method_cols].astype("int").values,
             cluster_size=cluster_size,
         )
-        # params = self.model["research"]["candidate group assignment probs"].get_parameters()[0].reshape(35,5)
+
+        weighted = np.empty(methods.shape)
+        for person in range(methods.shape[0]):
+            weighted[person, :] = research[person, :] * weights[person] + methods[
+                person, :
+            ] * (1 - weights[person])
+        self._methods = methods
+        self._research = research
+        self._weighted = weighted
+
+        return dict({"method": methods, "research": research, "weighted": weighted})
 
     def _BernoulliMixture(self, x, cluster_size):
         """Here, Z defines the group assignments and P the answering probability patterns for each group.
@@ -78,23 +106,20 @@ class Recommender:
         # run inference
         Q.update(repeat=1000, verbose=False)
 
-        result = dict(
-            {
-                "candidate group assignment probs": Z,  # .get_parameters()[0].reshape(N, cluster_size),
-                "group assignment probs": R,  # .get_parameters()[0],
-                "group pattern probs": P,  # .get_parameters()[0],
-                "answers": X,
-            }
-        )
+        # result = dict(
+        #     {
+        #         # Only the candidate vaues are relevant for now
+        #         "candidate probs": Z._message_to_child()[0].reshape(N, cluster_size),
+        #         "group assignment probs": R,
+        #         "group pattern probs": P,
+        #         "answers": X,
+        #     }
+        # )
+        result = Z._message_to_child()[0].reshape(N, cluster_size)
 
         return result
 
-    def plot(self):
-        # plot effective number of found groups
-        bpplt.hinton(self.R)
-
-        # plot group for each of the participants
-        bpplt.hinton(self.Z)
+    def plotProbabilites(self):
         plt.show()
 
     def recommend_similar(round: str):
