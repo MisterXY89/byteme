@@ -44,10 +44,10 @@ It sould facilitate the matching of researchers/participants with each other bas
 ### 1. General Information
 
 In this notebook, I quickly outline the model on which the recommendations are made. To begin with, data is stored in `~/data/data.csv` and comprises the following categories:
--   Research Questions: A list of `k` proposed questions answered by `n` participants $ \in$ {$0,1$}
--   Method Preferences: A list of `i` proposed methods answered by `n` participants $ \in$ {$0,1$}
--   Main Preference: An indicator answered by `n` participants of wether they regard Methods (0) or Research Question (1) as more important in their project $ \in (0,1)$
--   Desired Scope of the project: An indicator answered by `n` participants of how much effort they want to put in the project $ \in (0,1)$
+-   Research Questions: A list of `k` proposed questions answered by `n` participants $\in$ {0,1}
+-   Method Preferences: A list of `i` proposed methods answered by `n` participants $\in$ {0,1}
+-   Main Preference: An indicator answered by `n` participants of wether they regard Methods (0) or Research Question (1) as more important in their project $\in$ (0,1)
+-   Desired Scope of the project: An indicator answered by `n` participants of how much effort they want to put in the project $\in$ (0,1)
 All relevant code for the analysis is implemented in `Recommender` of *recommend.py* which will be imported first.
 
 
@@ -71,11 +71,11 @@ For classifying the participant into a fixed number of groups (adjustable with t
 
 An application of such models is illustrated by [Pierre G. B. Moutounet-Cartan](https://arxiv.org/abs/2005.02931). While skipping most of the important notation and theory, we build the following model twice - for both of the matrices - and use Bayesian inference to get our parameters of interest:
 1.  Priors:
-    $$ P_{ij} \sim Beta(0.5,0.5)$$
-    $$ R_{ij} \sim Dirichlet_k(e^{-5})$$
-    $$ Z_n | R_{ij} \sim Categorical_k(R)$$
+    $$P_{ij} \sim Beta(0.5,0.5)$$
+    $$R_{ij} \sim Dirichlet_k(e^{-5})$$
+    $$Z_n | R_{ij} \sim Categorical_k(R)$$
 2.  Likelihood:
-    $$ X_{in} | P_{ij},Z_n \sim Bernoulli(P_i,Z_n)$$
+    $$X_{in} | P_{ij},Z_n \sim Bernoulli(P_i,Z_n)$$
 3.  Posterior: This quantity can be obtained by using Bayes Theorem:
     $$P(X|Y)=\frac{P(Y|X)\cdot P(X)}{P(Y)}$$
 
@@ -84,7 +84,7 @@ An application of such models is illustrated by [Pierre G. B. Moutounet-Cartan](
 result = model.fit(cluster_size=5)
 ```
 
-### 3. Plots explaining the Grouping procedure
+### 3. Plots explaining the grouping procedure
 
 As a result of the model, for each participant **i** we get a probability, that he/she belongs to a certain cluster **c**. Since we build two models for Research- and Methods interests independently, we therefore get $10$ probabilities for each participant as illustrated below in the left graph.
 
