@@ -36,17 +36,13 @@ def swipe_post():
 
 @app.route('/swipe')
 def swipe():
-    # GET userMail from request
-    
-    userMail = request.args.get('userMail')
-    print(userMail)
+    user_name = request.args.get('userName')
+    user_mail = request.args.get('userMail')
+    print(user_mail)
 
-    # TODO: between swipe Items add: methodIntro and researchInterestIntro as swipe_types
-
-    swipe_items = load_swipe_items()
+    swipe_items = load_swipe_items(limit = 2)
     print(swipe_items)
-    # swipe_items = []
-    return render_template("swipe.html", userMail=userMail, swipe_items=swipe_items)
+    return render_template("swipe.html", user_mail=user_mail, user_name=user_name, swipe_items=swipe_items)
 
 if __name__ == '__main__':
     print("Listening on port " + str(cf.PORT))
