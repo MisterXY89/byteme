@@ -4,6 +4,7 @@ import bayespy.plot as bpplt
 import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
+import numpy as np
 
 
 class Recommender:
@@ -17,16 +18,25 @@ class Recommender:
             dataPATH = path / "dummy.csv"
         else:
             dataPATH = path / "data.csv"
-        self.df = pd.read_csv(dataPATH)
+        self._df = pd.read_csv(dataPATH)
+        self.model = {}
+        self._method_cols = (str(x) for x in np.arange(22, 32, 1))
+        self._research_cols = (str(x) for x in np.arange(2, 22, 1))
 
-    def fit(self):
+    def fit(self, cluster_size: int = 6):
         """_summary_"""
-        self.Z, self.R, self.X = self.BernoulliMixture(
-            self.df.iloc[:, 7:].astype("int").values
+        self.model["research"] = self._BernoulliMixture(
+            self._df.loc[:, self._research_cols].astype("int").values,
+            cluster_size=cluster_size,
         )
-        return self.Z, self.R, self.X
 
-    def BernoulliMixture(self, x, cluster: int = 10):
+        self.model["methods"] = self._BernoulliMixture(
+            self._df.loc[:, self._method_cols].astype("int").values,
+            cluster_size=cluster_size,
+        )
+        # params = self.model["research"]["candidate group assignment probs"].get_parameters()[0].reshape(35,5)
+
+    def _BernoulliMixture(self, x, cluster_size):
         """Here, Z defines the group assignments and P the answering probability patterns for each group.
         Note how the plates of the nodes are matched: Z has plates (N,1) and P has plates (D,K), but in
         the mixture node the last plate axis of P is discarded and thus the node broadcasts plates (N,1)
@@ -44,10 +54,10 @@ class Recommender:
         D = x.shape[1]
 
         # conjugate Beta priors for Bernoulli Distribution
-        P = Beta([0.5, 0.5], plates=(D, cluster), name="P")
+        P = Beta([0.5, 0.5], plates=(D, cluster_size), name="P")
 
         # uninformative Dirichlet prior for Multinomial Discrete Variables
-        R = Dirichlet(cluster * [1e-5], name="R")
+        R = Dirichlet(cluster_size * [1e-5], name="R")
 
         # categorical distribution for the group assignments
         Z = Categorical(R, plates=(N, 1), name="Z")
@@ -67,11 +77,17 @@ class Recommender:
 
         # run inference
         Q.update(repeat=1000, verbose=False)
-        return (
-            Z,
-            R,
-            X,
+
+        result = dict(
+            {
+                "candidate group assignment probs": Z,  # .get_parameters()[0].reshape(N, cluster_size),
+                "group assignment probs": R,  # .get_parameters()[0],
+                "group pattern probs": P,  # .get_parameters()[0],
+                "answers": X,
+            }
         )
+
+        return result
 
     def plot(self):
         # plot effective number of found groups
