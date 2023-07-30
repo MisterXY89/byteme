@@ -1,8 +1,12 @@
+<img src="static/images/ByteMe Logo_phelia_wide.png" align="center" />
+
+<br>
+
 ByteMe
 ================
 
 <!-- include logo -->
-<img src="static/images/ByteMe Logo_phelia.png" align="right" height="200" />
+
 
 Match researchers/participants with each other based on their research interests.
 
@@ -57,6 +61,10 @@ Visit http://localhost:8080/ to view the app.
     - Most Similar System
     - Most Different System
     - Random
+
+
+## Contributors
+Tilman Kerl & Anton Lechuga, Phelia Weiss, Dylan Paltra, Johanna Klapproth, Johanna Mehltretter, Sammie Douglas, Max Haag, Birgit Zeyer-Gliozzo
 
 ## LICENSE: MIT License
 
