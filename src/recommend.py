@@ -252,7 +252,9 @@ class Recommender:
         i = 1
         while len(big) == 0:
             big = {k: 1 for k, v in recommendations.items() if len(v) > max_size - i}
-            i -= 1
+            i += 1
+            if i == 5:
+                return recommendations
         small = {
             k: min_size - len(v)
             for k, v in recommendations.items()
@@ -271,6 +273,14 @@ class Recommender:
                 for k, v in recommendations.items()
                 if len(v) > max_size
             }
+            i = 1
+            while len(big) == 0:
+                big = {
+                    k: 1 for k, v in recommendations.items() if len(v) > max_size - i
+                }
+                i += 1
+                if i == 5:
+                    return recommendations
 
             small = {
                 k: len(v) - min_size
