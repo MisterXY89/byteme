@@ -63,7 +63,7 @@ Visit http://localhost:8080/ to view the app.
 
 
 ## Contributors
-Tilman Kerl & Anton Lechuga, Phelia Weiss, Dylan Paltra, Johanna Klapproth, Johanna Mehltretter, Sammie Douglas, Max Haag, Birgit Zeyer-Gliozzo
+Tilman Kerl & Anton Lechuga, Phelia Weiss, Dylan Paltra, Johanna Klapproth, Johanna Mehltretter, Sammie Douglas, Max Haag, Birgit Zeyer-Gliozzo, ...
 
 ## LICENSE: MIT License
 
