@@ -1,6 +1,24 @@
 {% extends "layout.html" %}
 {% block header %}
+<div class="container justify-content-center py-4 mb-4 border-bottom border-2 border-dark">
+    <div class="row">
+        <div class="pe-5 col-6 text-end">
+            <strong>ByteMe</strong>
+        </div>
+        <div class="col-6 text-start">
+            {{ user_name }}
+        </div>
+    </div>
+    <!-- <div class="row pt-2">
+        <div class="col pt-3">
+            <div class="progress" style="margin:auto; margin-top:5px; width: 310px;">
+                <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 1%;" aria-valuenow="1"
+                    aria-valuemin="0" aria-valuemax="100">1%</div>
+            </div>
+        </div>
+    </div> -->
 
+</div>
 
 {% endblock %}
 
