@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import matplotlib.patches as mpatches
+import random
 
 try:
     from simData import generate
@@ -133,7 +134,7 @@ class Recommender:
             )
             for xe, ye in zip(xrange, self._methods.T):
                 x = np.linspace(xe - 0.2, xe - 0.05, len(ye))
-                ax[0].scatter(x, ye, c="gray")
+                ax[0].scatter(x, ye, c="green")
             for xe, ye in zip(xrange, self._research.T):
                 x = np.linspace(xe + 0.05, xe + 0.2, len(ye))
                 ax[0].scatter(x, ye, c="orange")
@@ -142,9 +143,9 @@ class Recommender:
                 ax[1].scatter(x, ye, c="gray")
 
             orange_patch = mpatches.Patch(color="orange", label="Research Clusters")
-            gray_patch = mpatches.Patch(color="gray", label="Method Clusters")
+            green_patch = mpatches.Patch(color="green", label="Method Clusters")
 
-            ax[0].legend(handles=[gray_patch, orange_patch])
+            ax[0].legend(handles=[green_patch, orange_patch])
 
             ax[0].set_xticks(xrange)
             ax[1].set_xticks(xrange)
@@ -168,7 +169,7 @@ class Recommender:
                 ticks - 0.1,
                 self._methods[person, :],
                 label="Method Cluster",
-                color="gray",
+                color="green",
             )
             ax[0].scatter(
                 ticks + 0.1,
@@ -207,13 +208,24 @@ class Recommender:
 
     def recommend_similar(round: str, group_nums: int):
         recommendations = {f"group {i}": {} for i in range(1, group_nums + 1)}
+
         if round == "similar":
             raise NotImplementedError()
 
         if round == "different":
             raise NotImplementedError()
         if round == "random":
-            raise NotImplementedError()
+            recommendations = proposeRandom()
+
+    def proposeRandom(self, group_size: int = 6):
+        groups = {}
+        n = self._weighted.shape[0]
+        mylist = np.arange(0, n, 1)
+        random.shuffle(mylist)
+        return {
+            f"group {idx}": mylist[i : i + group_size]
+            for idx, i in enumerate(range(0, len(mylist), group_size))
+        }
 
 
 if __name__ == "__main__":
