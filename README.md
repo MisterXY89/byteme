@@ -37,9 +37,9 @@ $ python3 app.py
 Visit http://localhost:8080/ to view the app.
 
 
-## Planned Usage:
-
-## The App is implemented in order to find groups for the SICSS Munich
+## About:
+This app is a project for the [Summer Institute in Computational Social Science](https://sicss.io/2023/munich/) 2023 in Munich.
+It sould facilitate the matching of researchers/participants with each other based on their research interests for the group projects.
 
 ### 1. General Information
 
