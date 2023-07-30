@@ -87,6 +87,8 @@ function collect_results() {
 
     var userMail = document.getElementById("user_mail").value;
     var userName = document.getElementById("user_name").value;
+    var effort = document.getElementById("effort").value;
+    var meth_pref = document.getElementById("preference").value;
 
     var superLikeDiv = document.querySelector("input[name='super_like']:checked");    
     var iconHeartDivs = document.getElementsByClassName("like-icon-div");
@@ -101,7 +103,12 @@ function collect_results() {
         var updatedValue = offDiv.checkVisibility() ? 0 : 1;
         preferences[cardId].value = updatedValue;
 
-        var isSuperLike = superLikeDiv.id.split("-")[1] == cardId ? 1 : 0;
+        var isSuperLike;
+        if (superLikeDiv == null) {
+            isSuperLike = 0;
+        } else {
+            isSuperLike = superLikeDiv.id.split("-")[1] == cardId ? 1 : 0;
+        }
 
         preferences[cardId].super_like = isSuperLike;
     }
@@ -109,7 +116,9 @@ function collect_results() {
     var results = {
         user_mail: userMail,
         user_name: userName,
-        prefs: preferences,        
+        swipes: preferences,
+        effort: effort,
+        preference: meth_pref
     };
 
     return results;
@@ -121,6 +130,10 @@ function sendResults() {
      */
 
     var results = collect_results();
+    console.log("SEND-RESULTS:", results);
+
+    console.log(JSON.stringify(results));
+
     fetch('/swipe', {
         method: 'POST',
         headers: {
@@ -134,7 +147,7 @@ function sendResults() {
         .then(data => {
             console.log('Success:', data);
         });
-});
+}
 
 function initCards(card, index) {
     /**

@@ -1,7 +1,10 @@
 
 from app_init import *
 
-from src.data_loading import load_swipe_items
+from src.data_loading import (
+    load_swipe_items,
+    save_swipe_preferences
+)
 
 @app.route('/')
 def index():
@@ -21,28 +24,32 @@ def checkResults():
     
 
 
-# swipe post --> read preferences from request and save file
-@app.route('/swipe', methods=['POST'])
-def swipe_post():
-    swipe_preferences = request.form
-    print(swipe_preferences)
-
-    # save swipe_preferences to file using pandas
-    save_swipe_preferences(swipe_preferences)
-
-
-
-
-
-@app.route('/swipe')
+@app.route('/swipe', methods=['GET', 'POST'])
 def swipe():
+    # POST request
+    if request.method == 'POST':    
+        swipe_preferences = request.json
+        print(swipe_preferences["user_mail"])
+
+        # save swipe_preferences to file using pandas
+        save_swipe_preferences(swipe_preferences)
+
+        return jsonify(
+            success=True,
+        )
+    
+    # GET request
     user_name = request.args.get('userName')
-    user_mail = request.args.get('userMail')
-    print(user_mail)
+    # user_mail = request.args.get('userMail')
+    user_mail = user_name + "@test.com"
+    effort = request.args.get('effort')
+    preference = request.args.get('preference')
+    
+    print("Effort: ", effort)
+    print("Preference: ", preference)
 
     swipe_items = load_swipe_items(limit = 2)
-    print(swipe_items)
-    return render_template("swipe.html", user_mail=user_mail, user_name=user_name, swipe_items=swipe_items)
+    return render_template("swipe.html", user_mail=user_mail, user_name=user_name, swipe_items=swipe_items, effort=effort, preference=preference)
 
 if __name__ == '__main__':
     print("Listening on port " + str(cf.PORT))

@@ -13,26 +13,28 @@
         <div id="step-1-form">
           <div class="form-floating mb-3">
             <input type="Name" class="form-control" name="userName" id="userName" required placeholder="name@example.com">
-            <label for="userName">Name</label>
+            <label for="userName">Name (make it unique)</label>
           </div>
+          <!-- 
           <div class="form-floating mb-3">
-            <input type="email" class="form-control" name="userMail" id="userMail" aria-describedby="userMailDesc" required placeholder="name@example.com">
+            <input type="e  mail" class="form-control" name="userMail" id="userMail" aria-describedby="userMailDesc" required placeholder="name@example.com">
             <label for="userMail">Email address</label>
             <small id="userMailDesc">This will be used a a unique identifier, you will recive no mails.</small>
-          </div>
+          </div> 
+          -->
           <button class="w-100 btn btn-lg btn-primary" type="button" id="next-step-btn">Start</button>
         </div>
         <div id="step-2-form">
             <h5>Set you preferences</h5>
             <div class="mb-3">
-              <label for="expectedOutput" class="form-label">Expected output of the project</label>
-              <input type="range" class="form-range" id="expectedOutput" min="0" max="1" value="0.5" step="0.05" aria-describedby="expectedOutputDesc">
-              <small id="expectedOutputDesc">0: Just coding, 1: Paper</small>
+              <label for="effort" class="form-label">Expected output of the project</label>
+              <input type="range" class="form-range" name="effort" id="effort" min="0.01" max="0.99" step="0.0001" value="0.5" aria-describedby="effortDesc">
+              <small id="effortDesc">0: Just coding, 1: Paper</small>
             </div>
             <div class="mb-3">
-              <label for="preferences" class="form-label">Method or topic preference</label>
-              <input type="range" class="form-range" id="preferences" min="0" max="1" value="0.5" step="0.05" aria-describedby="preferencesDesc">
-              <small id="preferencesDesc">0: Method-focus, 1: Topic-focus</small>
+              <label for="preference" class="form-label">Method or topic focus</label>
+              <input type="range" class="form-range" name="preference" id="preference" min="0.01" max="0.99" step="0.0001" value="0.5" aria-describedby="preferenceDesc">
+              <small id="preferenceDesc">0: Method-focus, 1: Topic-focus</small>
             </div>
           <button class="w-100 btn btn-lg btn-primary" type="submit" id="startSwipe">Let's swipe</button>
         </div>        
