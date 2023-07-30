@@ -177,8 +177,8 @@ function checkProgress() {
      */
 
     // -2 because of the intro cards (excluded)
-    progress_perc = Math.round(Object.keys(preferences).length / (allCards.length-2) * 100);
-    // console.log("PROGRESS: " + progress_perc);
+    progress_perc = Math.round(Object.keys(preferences).length / (allCards.length-3) * 100);
+    console.log("PROGRESS: " + progress_perc);
 
     // progress_bar.style.width = progress_perc + "%";
     // progress_bar.innerHTML = progress_perc + "%";

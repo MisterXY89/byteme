@@ -1,0 +1,76 @@
+RESEARCH_topics_and_sent,"Topics and sentiments in relationship posts on reddit X gender, sexuality, time etc."
+RESEARCH_online_incivili,Online incivility/hate speech/intolerance
+RESEARCH_differentiating,Differentiating between online hate and criticism (e.g. against Claudia Neumann)
+RESEARCH_relationship_of,Relationship of video game practices and foreign policy preferences
+RESEARCH_evolvement_of_e,Evolvement of edutainment style over time (TEDtalks dataset)
+RESEARCH_pop_culture_ref,Pop culture references in U.S. Army public communication
+RESEARCH_political_behav,Political behavior of different generation immigrants
+RESEARCH_political_attit,Political attitudes
+RESEARCH_immigration_pol,Immigration policy
+RESEARCH_legislative_pol,Legislative politics
+RESEARCH_organization_of,Organization of parliaments
+RESEARCH_special_interes,Special interest web forums/subreddits user behavior
+RESEARCH_european_union/,European Union/Europe
+RESEARCH_lobbying,Lobbying
+RESEARCH_globalization/g,Globalization/Global Studies
+RESEARCH_political_socio,Political Sociology
+RESEARCH_power,Power
+RESEARCH_economic_sociol,Economic Sociology/Theory
+RESEARCH_organizations/c,Organizations/Corporations/Companies
+RESEARCH_big_tech,Big Tech
+RESEARCH_big_oil,Big Oil
+RESEARCH_labelling_of_co,Labelling of commercial collaborations/ads on social media
+RESEARCH_country_compari,"Country comparison of news coverage (e.g. on Ukraine, climate, LQBTQIA+)"
+RESEARCH_user_reactions_,"User reactions to different topics on social media (e.g. on Ukraine, climate, LQBTQIA+)"
+RESEARCH_citation_networ,Citation networks in scientific papers and prediction of authors
+"RESEARCH_impact_of_""surv","Impact of ""survey professionalism"" of respondents on survey results"
+RESEARCH_comparison_of_t,"Comparison of traditional (e.g. football, basketball) and special interest (e.g. LARP, hobby horsing) sports online communities"
+RESEARCH_retractionwatch,retractionwatch.com - Which papers get retracted and why?
+RESEARCH_developing_the_,Developing the ByteMe App for bigger use cases (e.g. conferences)
+RESEARCH_perceptions_of/,"Perceptions of/attitudes towards AI, technology, digitalization"
+"RESEARCH_ai,_technology,","AI, technology, digitalization and inequality/well-being"
+RESEARCH_labour_market_t,Labour market trends
+RESEARCH_internet_use_of,Internet use of specific groups (e.g. older people)
+RESEARCH_public_opinion,Public opinion
+RESEARCH_stereotypes_and,Stereotypes and biases
+RESEARCH_reproducible_re,Reproducible research
+RESEARCH_effects_of_gend,Effects of gender indications on success/reactions on reddit
+RESEARCH_movement_of_top,Movement of topics/language between forums/websites to mainstream
+RESEARCH_algospeak_(jarg,"Algospeak (jargon to circumvent censorship, e.g. ""corn"" for porn)"
+RESEARCH_identifying_pol,Identifying political polarization through emotionalization
+RESEARCH_dis-/misinforma,Dis-/misinformation
+RESEARCH_identifying_ai_,Identifying AI in disinformation
+RESEARCH_political_commu,Political communication
+RESEARCH_identifying_rac,Identifying racism in text data
+RESEARCH_trust_in_ai_in_,Trust in AI in the context of journalism and disinformation
+RESEARCH_political_parti,Political participation
+RESEARCH_populism,Populism
+RESEARCH_democracy,Democracy
+RESEARCH_incels,Incels
+RESEARCH_tradwives,Tradwives
+RESEARCH_detecting_radic,Detecting radicalization
+RESEARCH_funding_applica,Funding applications
+RESEARCH_political_langu,Political language of elites towards migrants of different ethnicities
+RESEARCH_misogyny,Misogyny
+RESEARCH_corporate_commu,Corporate communication on climate change
+RESEARCH_historical_text,Historical texts
+METHOD_web-scraping_(c,Web-Scraping (Creation of usable Datasets)
+METHOD_text_preprocess,Text Preprocessing (esp. RegEx)
+METHOD_improvement_of_,Improvement of Survey Questions
+METHOD_creation_of_a_d,Creation of a Dictionary
+METHOD_topic_modeling_,Topic Modeling with BERT
+METHOD_package_develop,Package development
+METHOD_web-application,Web-Applications
+METHOD_reproducible_da,Reproducible datasets
+METHOD_social_network_,Social Network Analysis
+METHOD_analysis_of_leg,Analysis of Legal Documents
+METHOD_sentiment_analy,Sentiment Analysis
+METHOD_word_embeddings,Word Embeddings
+METHOD_mixed_methods_(,Mixed Methods (e.g. Survey + NLP)
+METHOD_embedding_regre,Embedding Regressions
+METHOD_linkage_survey_,Linkage Survey with Observational Data
+METHOD_linkage_of_obse,Linkage of Observational Data with Experimental Designs
+METHOD_poststratificat,Poststratification
+METHOD_api-usage_(e.g.,API-Usage (e.g. Reddit)
+METHOD_screen_scraping,Screen Scraping
+METHOD_creation_of_cod,Creation of Coding Instructions followed by Data Annotation

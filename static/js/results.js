@@ -1,6 +1,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // var confettiCanvas = document.createElement('canvas');
+    // document.body.appendChild(confettiCanvas);
+
+    // var confetti = confetti.create(confettiCanvas, {
+    //     resize: true,
+    //     useWorker: true
+    // });
+
     const round1 = document.querySelector('#groups-round-1');
     const round2 = document.querySelector('#groups-round-2');
     const round3 = document.querySelector('#groups-round-3');
@@ -39,15 +47,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(data);
 
                 rounds[round - 1].querySelector(".user-group").innerHTML = data.user_group;
+                
+                // confetti({
+                //     particleCount: 100,
+                //     spread: 70,
+                //     origin: { y: 0.6 }
+                // });
 
                 // enable next round button
                 rounds[round - 1].querySelector("button").disabled = false;
                 rounds[round - 1].addEventListener('click', () => {
                     getRounds(round + 1);
                 });
-                
-            });
 
+            });
     }
 
     function checkForResults() {
@@ -64,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             });
     }
-
 
     // ping server for results every 5 seconds
     var refreshIntervalId = setInterval(checkForResults, 5000);

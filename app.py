@@ -10,7 +10,7 @@ from src.data_loading import (
 from src.recommend import Recommender
 
 USER_TOTAL = 2
-GROUP_SIZE = 5
+GROUP_SIZE = 2
 
 @app.route('/')
 def index():
@@ -27,7 +27,7 @@ def getResults(matching_round, user_name):
     swipe_preferences = load_swipe_preferences()
     user_idx = swipe_preferences[swipe_preferences["user_name"] == user_name].index.to_list()[0]
 
-    kind_round_list = ["random", "motivation", "random"]
+    kind_round_list = ["similar", "motivation", "random"]
     recommender = Recommender()
     recommender.fit()
     results = recommender.recommend(kind=kind_round_list[matching_round-1], group_size=GROUP_SIZE)
@@ -88,7 +88,7 @@ def swipe():
     print("Effort: ", effort)
     print("Preference: ", preference)
 
-    swipe_items = load_swipe_items(limit = 2)
+    swipe_items = load_swipe_items()
     return render_template("swipe.html", user_mail=user_mail, user_name=user_name, swipe_items=swipe_items, effort=effort, preference=preference)
 
 if __name__ == '__main__':
