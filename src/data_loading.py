@@ -127,7 +127,9 @@ def save_swipe_preferences(swipe_dict):
             user_swipes_line += SWIPE_PREFERENCES_FILE_SEP.join([                
                 str(swipes[swipe_key]["value"])
             ])
+            user_swipes_line += SWIPE_PREFERENCES_FILE_SEP
 
+        user_swipes_line = user_swipes_line[:-1]
         user_swipes_line += "\n"
         fi.write(user_swipes_line)
 

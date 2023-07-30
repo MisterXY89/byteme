@@ -33,6 +33,7 @@ function show_results() {
         
         // INTEREST
         interest_cell.innerHTML = preferences[key].text_full;
+        interest_cell.classList.add("interest-cell");
 
         // VALUE -> YES/NO
         var is_checked = () => (window.preferences[key].value) == 1 ? "checked" : "";

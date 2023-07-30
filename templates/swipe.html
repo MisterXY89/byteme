@@ -32,25 +32,26 @@
 <input type="hidden" id="effort" value="{{ effort }}">
 <input type="hidden" id="preference" value="{{ preference }}">
 
-<div id="swipe-results" class="p-5">
+<div id="swipe-results" class="">
 
-    <div class="container">
+    <div class="container-lg">
 
         <h3 class="pb-3 border-bottom border-dark">Confirm swipes</h3>
-        
-        <table class="table">
+        <div class="table-responsive">
+            <table class="table">
 
-            <thead>
-                <th scope="col"> Interests (incl. methods and research) </th>
-                <th scope="col"> Preference </th>
-                <th scope="col"> Superlike </th>
-            </thead>
+                <thead>
+                    <th scope="col"> Interests (incl. methods and research) </th>
+                    <th scope="col"> Preference </th>
+                    <th scope="col"> Superlike </th>
+                </thead>
 
-            <tbody id="swiped-items">
+                <tbody id="swiped-items">
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+        </div>
 
         <a class="btn btn-primary text-end" id="sendSwipeResults">Send results</a>
 
