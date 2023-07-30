@@ -3,8 +3,13 @@ from app_init import *
 
 from src.data_loading import (
     load_swipe_items,
-    save_swipe_preferences
+    save_swipe_preferences,
+    load_swipe_preferences
 )
+
+from src.recommend import Recommender
+
+USER_TOTAL = 2
 
 @app.route('/')
 def index():
@@ -20,9 +25,22 @@ def results():
 def checkResults():
     # check if all users have swiped & return true/false
     # if true, calculate matches and send along with userMail to all users
-    return "checkResults"
-    
 
+    number_items = len(load_swipe_preferences())
+    results = []
+    results_ready = number_items >= USER_TOTAL
+    if results_ready:
+        recommender = Recommender()
+        recommender.fit()
+        results = recommender.predict()
+
+    return jsonify({
+        "success": True,
+        "number_items": number_items,
+        "progress": number_items / USER_TOTAL,
+        "results": results
+    })
+    
 
 @app.route('/swipe', methods=['GET', 'POST'])
 def swipe():

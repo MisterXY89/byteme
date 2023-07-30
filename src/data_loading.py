@@ -95,6 +95,9 @@ def prepare_pref_file(interest_keys, force=False):
         if list(swipe_preferences_df.columns) != header_cols:
             prepare_pref_file(interest_keys, force=True)
 
+def load_swipe_preferences():
+    return pd.read_csv(SWIPE_PREFERENCES_FILE, sep=SWIPE_PREFERENCES_FILE_SEP)
+
 def save_swipe_preferences(swipe_dict):
     # append new line to file // create new if not exists
 
