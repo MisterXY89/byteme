@@ -12,8 +12,8 @@ def index():
 	
 @app.route('/results')
 def results():
-     return "results"
-	# return render_template("results.html")
+    # return "results"
+	return render_template("results.html")
 
 
 @app.route('/checkResults')
