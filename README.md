@@ -1,4 +1,4 @@
-<img src="static/images/ByteMe Logo_phelia_wide.png" align="center" height="150px"/>
+<img src="static/images/ByteMe_Logo_phelia_wide_transp.png" align="center" height="150px"/>
 <br>
 
 ByteMe
