@@ -22,7 +22,7 @@ class Recommender:
     def __init__(self, sim: bool = False):
         dataPATH = Path(__file__).parent.parent.joinpath("data").joinpath("data.csv")
         if sim:
-            self._df = generate(30, 55, 20)
+            self._df = generate(25, 55, 20)
         else:
             self._df = pd.read_csv(dataPATH, sep=";")
         self._effort_col = "effort"
@@ -199,7 +199,6 @@ class Recommender:
             ax["B"].boxplot(
                 self._df.loc[:, self._effort_col],
                 notch=True,
-                flierprops=dict(markerfacecolor="b", marker="D"),
             )
             # ax["B"].hlines(y=[np.quantile()])
 
@@ -221,7 +220,7 @@ class Recommender:
 
         return recommendations
 
-    def _proposeRandom(self, group_number: int = 6) -> dict:
+    def _proposeRandom(self, group_number: int = 5) -> dict:
         groups = {}
         n = self._weighted.shape[0]
         mylist = np.arange(0, n, 1)
@@ -231,7 +230,7 @@ class Recommender:
             for idx, i in enumerate(range(0, len(mylist), group_number))
         }
 
-    def _proposeSimilar(self, max_size: int = 7, min_size: int = 3) -> dict:
+    def _proposeSimilar(self, max_size: int = 6, min_size: int = 3) -> dict:
         weighted_df = pd.DataFrame(self._weighted)
         recommendations = {f"Group {i}": [] for i in range(1, weighted_df.shape[1] + 1)}
 
