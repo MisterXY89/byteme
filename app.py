@@ -10,8 +10,11 @@ from src.data_loading import (
 from src.recommend import Recommender
 
 # TODO SET USER_TOTAL TO XXX
-USER_TOTAL = 2
+USER_TOTAL = 22
 GROUP_SIZE = 5
+
+global recommender
+recommender = Recommender()
 
 @app.route('/')
 def index():
@@ -30,9 +33,7 @@ def getResults(matching_round, user_name):
     print("user_idx: ", user_idx)
 
     kind_round_list = ["similar", "motivation", "random"]
-    print(kind_round_list[matching_round-1])
-    recommender = Recommender()
-    recommender.fit()
+    print(kind_round_list[matching_round-1])    
     results = recommender.recommend(kind=kind_round_list[matching_round-1], group_size=GROUP_SIZE)    
     print(results)
     
@@ -51,6 +52,7 @@ def getResults(matching_round, user_name):
 
 @app.route('/checkResults')
 def checkResults():
+    global recommender
     # check if all users have swiped & return true/false
     # if true, calculate matches and send along with userMail to all users
 
@@ -59,6 +61,7 @@ def checkResults():
     ready = False
     if number_items >= USER_TOTAL:
         ready = True
+        recommender.fit()
     
     return jsonify({
         "success": True,
