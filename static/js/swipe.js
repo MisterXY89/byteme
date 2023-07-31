@@ -80,6 +80,11 @@ function show_results() {
 
 }
 
+// Where el is the DOM element you'd like to test for visibility
+function isHidden(el) {
+    return (el.offsetParent === null)
+}
+
 function collect_results() {
     /**
      * Collect the results from the swipe cards and return them as a JSON object
@@ -101,7 +106,9 @@ function collect_results() {
         var offDiv = iconHeartDiv.getElementsByClassName("p-off")[0];
         var cardId = iconHeartDiv.id;
     
-        var updatedValue = offDiv.checkVisibility() ? 0 : 1;
+        // var updatedValue = offDiv.checkVisibility() ? 0 : 1;
+        // var updatedValue = offDiv.checkVisibility() ? 0 : 1;
+        var updatedValue = isHidden(offDiv) ? 0 : 1;        
         preferences[cardId].value = updatedValue;
 
         var isSuperLike;
